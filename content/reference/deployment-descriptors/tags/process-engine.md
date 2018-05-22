@@ -235,7 +235,7 @@ The following is a list with the most commonly used process engine configuration
   <tr>
     <td><code>authorizationEnabled</code></td>
     <td>Boolean</td>
-    <td>Activates authorization checks.</td>
+    <td>Activates <a href="{{< relref "user-guide/process-engine/authorization-service.md#enable-authorization-checks ">}}">authorization checks</a>.</td>
   </tr>
 
   <tr>
@@ -254,7 +254,7 @@ The following is a list with the most commonly used process engine configuration
     <td><code>databaseSchemaUpdate</code></td>
     <td>String</td>
     <td>
-        Sets the value for process engine database schema creation.
+        Sets the value for process engine <a href="{{< relref "user-guide/process-engine/database.md#database-configuration">}}">database schema creation</a>.
       <p>
         <strong>Values:</strong> <code>false</code>, <code>create-drop</code>, <code>true</code>.
       </p>
@@ -273,7 +273,7 @@ The following is a list with the most commonly used process engine configuration
     <td><code>defaultNumberOfRetries</code></td>
     <td>Integer</td>
     <td>
-        Controls how many retries should be accomplished for a failed job. Default value: <code>3</code>
+        Specifies how many times a job will be executed before an incident is raised. Default value: <code>3</code>
     </td>
   </tr>
 
@@ -335,10 +335,19 @@ The following is a list with the most commonly used process engine configuration
   </tr>
 
   <tr>
+    <td><code>failedJobRetryTimeCycle</code></td>
+    <td>String</td>
+    <td>
+     Sets how often a job is retried after a fail and how long the engine should wait until it tries to execute a job again. See the <a href="{{< relref "user-guide/process-engine/the-job-executor.md#retry-time-cycle-configuration" >}}">user guide</a>
+        for more details on this setting.
+    </td>
+  </tr>
+
+  <tr>
     <td><code>history</code></td>
     <td>String</td>
     <td>
-        Sets the level of the process engine history.
+        Sets the <a href="{{< relref "user-guide/process-engine/history.md#choose-a-history-level">}}">level of the process engine history</a>.
       <p>
         <strong>Values:</strong> <code>none</code>, <code>activity</code>, <code>audit</code>, <code>full</code>.
       </p>
@@ -385,7 +394,16 @@ The following is a list with the most commonly used process engine configuration
       </p>
     </td>
   </tr>
-
+  <tr>
+    <td><code>jdbcBatchProcessing</code></td>
+    <td>Boolean</td>
+    <td>
+        Controls if the engine executes the jdbc statements as Batch or not.
+      <p>
+        Default is <code><strong>true</strong></code>, but this has to be disabled for some databases. See <a href="{{<relref "user-guide/process-engine/database.md#jdbc-batch-processing" >}}">the user guide</a> for further details.
+      </p>
+    </td>
+  </tr>
   <tr>
     <td><code>jobExecutorAcquireByDueDate</code></td>
     <td>Boolean</td>
@@ -497,7 +515,7 @@ The following is a list with the most commonly used process engine configuration
     <td><code>deploymentLockUsed</code></td>
     <td>Boolean</td>
     <td>
-        Sets if the process engine must acquire an exclusive lock when creating a deployment.
+        Sets if the process engine must acquire an <a href="{{< relref "user-guide/process-engine/deployments.md#deployments-in-a-clustered-scenario" >}}">exclusive lock when creating a deployment</a>.
         Default value: <code>true</code>
     </td>
   </tr>
@@ -510,6 +528,14 @@ The following is a list with the most commonly used process engine configuration
         When <code>false</code>, they may be processed in parallel, though depending of value of <code>deploymentLockUsed</code> they may still be synchronized
         using database pessimistic lock.
         Default value: <code>true</code>
+    </td>
+  </tr>
+  
+  <tr>
+    <td><a name="javaSerializationFormatEnabled"></a><code>javaSerializationFormatEnabled</code></td>
+    <td>Boolean</td>
+    <td>
+        Sets if Java serialization format can be used, when <a href="{{< relref "user-guide/process-engine/variables.md#object-values">}}">setting variables by their serialized representation</a>. Default value: <code>false</code>
     </td>
   </tr>
 
@@ -529,7 +555,91 @@ The following is a list with the most commonly used process engine configuration
     <td>String</td>
     <td><a href="{{< relref "user-guide/process-engine/history.md#history-cleanup">}}">History cleanup</a> batch window end time in the format <code>HH:mmZ</code> (Z is for RFC 822 time zone) or <code>HH:mm</code>. E.g., <code>23:00-0300</code> or <code>23:00</code>. In case <code>batchWindowEndTime</code> exceeds <code>batchWindowStartTime</code> it is considered 
     to be on the same date (e.g., cleanup runs each day between 20:00 and 23:00). Otherwise it is considered to be on the next calendar day (e.g., cleanup starts each 
-    day at 20:00 and finishes the next day at 01:00).</td>
+    day at 20:00 and finishes the next day at 01:00). Default value is `00:00`.</td>
+  </tr>
+  <tr>
+    <td><code>mondayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td><a href="{{< relref "user-guide/process-engine/history.md#history-cleanup">}}">History cleanup</a> batch window start time for Mondays. Requires the same format as <code>historyCleanupBatchWindowStartTime</code>.
+    In case it is not configured, batch window configured with <code>historyCleanupBatchWindowStartTime</code> and <code>historyCleanupBatchWindowEndTime</code> will be used for this day of week.
+    </td>
+  </tr>
+  <tr>
+    <td><code>mondayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td><a href="{{< relref "user-guide/process-engine/history.md#history-cleanup">}}">History cleanup</a> batch window end time for Mondays. Requires the same format and follows the same logic 
+    as <code>historyCleanupBatchWindowEndTime</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>tuesdayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Tuesdays.</td>
+  </tr>
+  <tr>
+    <td><code>tuesdayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Tuesdays.</td>
+  </tr>
+  <tr>
+    <td><code>wednesdayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Wednesdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>wednesdayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Wednesdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>thursdayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Thursdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>thursdayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Thursdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>fridayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Fridays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>fridayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Fridays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>saturdayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Saturdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>saturdayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Saturdays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>sundayHistoryCleanupBatchWindowStartTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowStartTime</code>, but for Sundays.
+    </td>
+  </tr>
+  <tr>
+    <td><code>sundayHistoryCleanupBatchWindowEndTime</code></td>
+    <td>String</td>
+    <td>Similar to <code>mondayHistoryCleanupBatchWindowEndTime</code>, but for Sundays.
+    </td>
   </tr>
   <tr>
     <td><code>historyCleanupBatchSize</code></td>
@@ -541,6 +651,11 @@ The following is a list with the most commonly used process engine configuration
     <td>Integer</td>
     <td>Defines the minimum amount of top-level objects required for data to be removed. Default value is 10. Hint: if the value is too small and the process 
     engine continues to be used during history cleanup, it can happen that real SQL delete statements are called very frequently for small amounts of data.</td>
+  </tr>
+  <tr>
+    <td><code>historyCleanupDegreeOfParallelism</code></td>
+    <td>Integer</td>
+    <td>Defines the level of parallelism for history cleanup. Default value is 1 (no parallelism). Maximum allowed value is 8.</td>
   </tr>
   <tr>
     <td><code>historyCleanupMetricsEnabled</code></td>
@@ -559,6 +674,36 @@ The history time to live defines the number of days using a time specified by th
     <td>Map</td>
     <td>Defines history time to live for each specific historic batch operation.
 The history time to live defines the number of days using a time specified by the ISO-8601 date format. The function only accepts the notation to define a number of days.
+    </td>
+  </tr>
+</table>
+
+## Login parameters
+
+<table class="table table-striped">
+  <tr>
+    <td><code>loginMaxAttempts</code></td>
+    <td>Integer</td>
+    <td>Defines the maximum number of attempts a user can try to login before this user is locked. Default value: 10
+    </td>
+  </tr>
+  <tr>
+    <td><code>loginDelayMaxTime</code></td>
+    <td>Integer</td>
+    <td>Defines the maximum amount of time (in seconds) for which a user must wait until they are able to try to login again. Default value: 60 seconds
+    </td>
+  </tr>
+  <tr>
+    <td><code>loginDelayFactor</code></td>
+    <td>Integer</td>
+    <td>Defines the factor by which the delay is calculated after an unsuccessful login attempt. Default value: 2
+    </td>
+  </tr>
+  </tr>
+  <tr>
+    <td><code>loginDelayBase</code></td>
+    <td>Integer</td>
+    <td>Defines the base by which the delay is calculated after an unsuccessful login attempt. Default value: 3
     </td>
   </tr>
 </table>

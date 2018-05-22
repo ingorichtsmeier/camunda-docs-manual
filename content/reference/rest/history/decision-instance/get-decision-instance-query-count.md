@@ -60,6 +60,10 @@ GET `/history/decision-instance/count`
     <td>decisionDefinitionName</td>
     <td>Filter by the name of the decision definition the instances belongs to.</td>
   </tr>
+  <tr>
+    <td>decisionDefinitionNameLike</td>
+    <td>Filter by the name of the decision definition the instances belongs to, that the parameter is a substring of.</td>
+  </tr>
   </tr>
     <td>processDefinitionId</td>
     <td>Filter by the process definition the instances belongs to.</td>
@@ -106,14 +110,14 @@ GET `/history/decision-instance/count`
     <td>evaluatedBefore</td>
     <td>
       Restrict to instances that were evaluated before the given date.
-      The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.
+      By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.
     </td>
   </tr>
   <tr>
     <td>evaluatedAfter</td>
     <td>
       Restrict to instances that were evaluated after the given date.
-      The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.
+      By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.
     </td>
   </tr>
   <tr>
@@ -146,6 +150,7 @@ GET `/history/decision-instance/count`
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 # Result
 

@@ -18,7 +18,7 @@ Manage authorizations for a variety of resources (e.g., *Applications*, *Groups*
 See [Authorization Service]({{< relref "user-guide/process-engine/authorization-service.md" >}}) for more information about Authorizations.
 
 {{< note title="Accessing the Authorization Management menu" class="info" >}}
-The Authorization Management menu is only usable by users which are granted with *All* permission for authorizations.
+The Authorization Management menu is only usable by users which are granted with *Read* permission for authorizations.
 {{< /note >}}
 
 # Grant Basic Permissions
@@ -159,7 +159,7 @@ This will limit the group's permissions to this running process instance. As wit
 
 # Grant Permission for Single Tasks
 
-Since several groups can participate in a process, it could be useful to restrict certain tasks to certain people/groups. For this example, we will reuse the *accouting* group and the *invoice* process from the previous sections. At least we need one running instance of the process.
+Since several groups can participate in a process, it could be useful to restrict certain tasks to certain people/groups. For this example, we will reuse the *accounting* group and the *invoice* process from the previous sections. At least we need one running instance of the process.
 
 {{< img src="../img/admin_filter_acc_read.png" title="Read Permissions" >}}
 

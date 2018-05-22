@@ -176,7 +176,17 @@ The following resources are available:
     <td>User</td>
     <td>1</td>
     <td>User Id</td>
-  </tr>      
+  </tr>
+  <tr>
+    <td>Report</td>
+    <td>15</td>
+    <td>Report Id</td>
+  </tr>
+  <tr>
+    <td>Dashboard</td>
+    <td>16</td>
+    <td>Dashboard Id</td>
+  </tr>
 </table>
 
 **Note:** The Resource Id should be '*' when you create new authorization with CREATE permissions only.
@@ -361,6 +371,10 @@ The following table gives an overview for which resources they are available:
   </tbody>
 </table>
 
+To execute an operation [asynchronously]({{< relref "user-guide/process-engine/batch.md">}}), only a "Create" permission on the Batch Resource is required. However, when executing the same operation synchronously, the specific permissions (e.g. "Delete" on Process Instance Resource) are checked. 
+
+For example, an user without the "Update" permission on the Process Instance Resource and granted "Create" permission on the Batch Resource can modify multiple Process Instances asynchronously by creating a batch, although he could not execute this operation synchronously.
+
 ## Additional Task Permissions
 
 This section explains the additional permissions that are available on the Task resource (in addition to Create, Update, Read and Delete).
@@ -483,6 +497,11 @@ In Addition to Update, Read and Delete, the following permissions are available 
 * Delete History
 
 The "Create Instance" permission is required to start new process instances.
+
+{{< note title="Start new process instance" class="info" >}}
+  To perfom that action, the user also needs to have "Create" permission on the Process Instance resource.
+
+{{< /note >}}
 
 ## Additional Decision Definition Permissions
 

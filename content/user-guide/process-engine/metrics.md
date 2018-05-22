@@ -25,7 +25,7 @@ The following table describes the built-in metrics. The identifiers of all built
   <tr>
     <td><b>BPMN Execution</b></td>
     <td>activity-instance-start</td>
-    <td>The number of activity instances started.</td>
+    <td>The number of activity instances started. This is also known as <b>flow node instances (FNI)</b>.</td>
   </tr>
   <tr>
     <td></td>
@@ -119,4 +119,9 @@ Metrics are reported with an identifier of the reporting party. This identifier 
 
 ## Disable Reporting
 
-By default, all built-in metrics are reported. Using the engine configuration flag `isMetricsEnabled` metrics reporting can be disabled.
+By default, all built-in metrics are reported. For the configuration via XML file (e.g. standalone.xml or bpm-platform.xml) you can disable reporting by adding the property:
+```xml
+<property name="metricsEnabled">false</property>
+```
+
+If you are directly accessing the Java API, you can disable the metrics reporting by using the engine configuration flag `isMetricsEnabled` and set it to `false`.

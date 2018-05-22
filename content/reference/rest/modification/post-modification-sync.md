@@ -23,7 +23,7 @@ section of the [user guide]({{< relref "user-guide/process-engine/process-instan
 
 # Method
 
-POST /modification/execute`
+POST `/modification/execute`
 
 
 # Parameters
@@ -76,7 +76,11 @@ A JSON object with the following properties:
         </tr>
         <tr>
           <td>transitionId</td>
-          <td><b>Can be used with instructions of types <code>startTransition</code></b>. Specifies the sequence flow to start.</td>
+          <td><b>Can be used with instructions of type <code>startTransition</code></b>. Specifies the sequence flow to start.</td>
+        </tr>
+        <tr>
+          <td>cancelCurrentActiveActivityInstances</td>
+          <td><b>Can be used with instructions of type <code>cancel</code></b>. Prevents the deletion of new created activity instances.</td>
         </tr>
       </table>
     </td>
@@ -132,6 +136,7 @@ Request Body:
     {
       "type": "cancel",
       "activityId": "anotherTask",
+      "cancelCurrentActiveActivityInstances" : true
     }
   ],
   "processInstanceIds": [

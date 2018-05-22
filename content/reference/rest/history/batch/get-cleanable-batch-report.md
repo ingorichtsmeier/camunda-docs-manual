@@ -35,6 +35,16 @@ GET `/history/batch/cleanable-batch-report`
     <th>Description</th>
   </tr>
   <tr>
+    <td>sortBy</td>
+    <td>Sort the results by a given criterion. Valid value is <code>finished</code>.
+    Must be used in conjunction with the <code>sortOrder</code> parameter.</td>
+  </tr>
+  <tr>
+    <td>sortOrder</td>
+    <td>Sort the results in a given order. Values may be <code>asc</code> for ascending order or <code>desc</code> for descending order.
+    Must be used in conjunction with the <code>sortBy</code> parameter.</td>
+  </tr>
+  <tr>
     <td>firstResult</td>
     <td>Pagination of results. Specifies the index of the first result to return.</td>
   </tr>
@@ -63,7 +73,7 @@ A JSON array containing finished batches information relevant to history cleanup
   <tr>
     <td>historyTimeToLive</td>
     <td>Number</td>
-    <td>The history time to live of the process definition.</td>
+    <td>The history time to live of the batch operation.</td>
   </tr>
   <tr>
     <td>finishedBatchCount</td>
@@ -111,13 +121,13 @@ GET `/history/batch/cleanable-batch-report`
   {
     "batchType":"instance-modification",
     "historyTimeToLive":5,
-    "finishedBatchCount":100
+    "finishedBatchCount":100,
     "cleanableBatchCount":53
   },
   {
     "batchType":"instance-deletion",
     "historyTimeToLive":5,
-    "finishedBatchCount":1000
+    "finishedBatchCount":1000,
     "cleanableBatchCount":13
   }
 ]

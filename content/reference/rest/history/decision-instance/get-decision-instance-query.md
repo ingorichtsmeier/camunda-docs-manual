@@ -60,6 +60,10 @@ GET `/history/decision-instance`
     <td>decisionDefinitionName</td>
     <td>Filter by the name of the decision definition the instances belongs to.</td>
   </tr>
+  <tr>
+    <td>decisionDefinitionNameLike</td>
+    <td>Filter by the name of the decision definition the instances belongs to, that the parameter is a substring of.</td>
+  </tr>
   </tr>
     <td>processDefinitionId</td>
     <td>Filter by the process definition the instances belongs to.</td>
@@ -106,14 +110,14 @@ GET `/history/decision-instance`
     <td>evaluatedBefore</td>
     <td>
       Restrict to instances that were evaluated before the given date.
-      The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.
+      By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.
     </td>
   </tr>
   <tr>
     <td>evaluatedAfter</td>
     <td>
       Restrict to instances that were evaluated after the given date.
-      The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.
+      By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.
     </td>
   </tr>
   <tr>
@@ -197,6 +201,7 @@ GET `/history/decision-instance`
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 # Result
 
@@ -232,7 +237,7 @@ Each historic decision instance object has the following properties:
   <tr>
     <td>evaluationTime</td>
     <td>String</td>
-    <td>The time the instance was evaluated. Has the format <code>yyyy-MM-dd'T'HH:mm:ss</code>.</td>
+    <td>The time the instance was evaluated. Default format* <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>.</td>
   </tr>
   <tr>
     <td>processDefinitionId</td>
@@ -325,6 +330,8 @@ Each historic decision instance object has the following properties:
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
+
 ## Decision Input Value
 
 {{< rest-decision-input deserializationParameter="disableCustomObjectDeserialization" >}}
@@ -372,7 +379,7 @@ GET `/history/decision-instance?includeInputs=true&includeOutputs=true`
       "decisionDefinitionId": "invoice-assign-approver:1:4c864d79-579d-11e5-9848-f0def1e59da8",
       "decisionDefinitionKey": "invoice-assign-approver",
       "decisionDefinitionName": "Assign Approver",
-      "evaluationTime": "2015-09-10T11:22:06",
+      "evaluationTime": "2015-09-10T11:22:06.000+0200",
       "id": "67ea2c3f-579d-11e5-9848-f0def1e59da8",
       "inputs": [
       {

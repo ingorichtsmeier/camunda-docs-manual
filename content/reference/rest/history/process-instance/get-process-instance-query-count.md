@@ -104,6 +104,10 @@ GET `/history/process-instance/count`
     <td>Only include process instances which have an incident. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
   </tr>
   <tr>
+    <td>withRootIncidents</td>
+    <td>Only include process instances which have a root incident. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
     <td>incidentStatus</td>
 	<td>Only include process instances which have an incident in status either <code>open</code> or <code>resolved</code>. 
 	To get all process instances, use the query parameter <code>withIncidents</code>.</td>
@@ -122,19 +126,19 @@ GET `/history/process-instance/count`
   </tr>
   <tr>
     <td>startedBefore</td>
-    <td>Restrict to instances that were started before the given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that were started before the given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>startedAfter</td>
-    <td>Restrict to instances that were started after the given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that were started after the given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>finishedBefore</td>
-    <td>Restrict to instances that were finished before the given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that were finished before the given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>finishedAfter</td>
-    <td>Restrict to instances that were finished after the given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that were finished after the given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>tenantIdIn</td>
@@ -156,22 +160,51 @@ GET `/history/process-instance/count`
   </tr>
   <tr>
     <td>executedActivityBefore</td>
-    <td>Restrict to instances that executed an activity before the given date (inclusive). The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that executed an activity before the given date (inclusive). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>executedActivityAfter</td>
-    <td>Restrict to instances that executed an activity after the given date (inclusive). The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that executed an activity after the given date (inclusive). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>executedActivityIdIn</td>
+    <td>Restrict to instances that executed an activity with one of given ids.</td>
+  </tr>
+  <tr>
+    <td>activeActivityIdIn</td>
+    <td>Restrict to instances that have an active activity with one of given ids.</td>
   </tr>
   <tr>
     <td>executedJobBefore</td>
-    <td>Restrict to instances that executed an job before the given date (inclusive). The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that executed an job before the given date (inclusive). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>executedJobAfter</td>
-    <td>Restrict to instances that executed an job after the given date (inclusive). The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to instances that executed an job after the given date (inclusive). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>active</td>
+    <td>Restrict to instances that are active</td>
+  </tr>
+  <tr>
+    <td>suspended</td>
+    <td>Restrict to instances that are suspended</td>
+  </tr>
+  <tr>
+    <td>completed</td>
+    <td>Restrict to instances that are completed</td>
+  </tr>
+  <tr>
+    <td>externallyTerminated</td>
+    <td>Restrict to instances that are externally terminated</td>
+  </tr>
+  <tr>
+    <td>internallyTerminated</td>
+    <td>Restrict to instances that are internally terminated</td>
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 # Result
 

@@ -37,12 +37,16 @@ GET `/history/process-definition/cleanable-process-instance-report/count`
     <td>Filter by process definition keys. Must be a comma-separated list of process definition keys.</td>
   </tr>
   <tr>
-    <td>firstResult</td>
-    <td>Pagination of results. Specifies the index of the first result to return.</td>
+    <td>tenantIdIn</td>
+    <td>Filter by a comma-separated list of tenant ids. A process definition must have one of the given tenant ids.</td>
   </tr>
   <tr>
-    <td>maxResults</td>
-    <td>Pagination of results. Specifies the maximum number of results to return. Will return less results if there are no more results left.</td>
+    <td>withoutTenantId</td>
+    <td>Only include process definitions which belong to no tenant. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>compact</td>
+    <td>Only include process instances which have more than zero finished instances. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
   </tr>
 </table>
 

@@ -94,16 +94,20 @@ GET `/history/user-operation`
     <td>Filter by the type of the entity that was affected by this operation, possible values are <code>Task</code>, <code>Attachment</code> or <code>IdentityLink</code>.</td>
   </tr>
   <tr>
+    <td>entityTypeIn</td>
+    <td>Filter by types of the entities that was affected by this operation, possible values are <code>Task</code>, <code>Attachment</code> or <code>IdentityLink</code>.</td>
+  </tr>
+  <tr>
     <td>property</td>
     <td>Only include operations that changed this property, e.g., <code>owner</code> or <code>assignee</code>.</td>
   </tr>
   <tr>
     <td>afterTimestamp</td>
-    <td>Restrict to entries that were created after the given timestamp. The timestamp must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2014-02-25T14:58:37</code>.</td>
+    <td>Restrict to entries that were created after the given timestamp. By default*, the timestamp must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2014-02-25T14:58:37.000+0200</code>.</td>
   </tr>
   <tr>
     <td>beforeTimestamp</td>
-    <td>Restrict to entries that were created before the given timestamp. The timestamp must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2014-02-25T14:58:37</code>.</td>
+    <td>Restrict to entries that were created before the given timestamp. By default*, the timestamp must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2014-02-25T14:58:37.000+0200</code>.</td>
   </tr>
   <tr>
     <td>sortBy</td>
@@ -124,6 +128,7 @@ GET `/history/user-operation`
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 # Result
 
@@ -282,7 +287,7 @@ GET `/history/user-operation?operationType=Claim&userId=demo&sortBy=timestamp&so
     "jobId": "aJobId",
     "jobDefinitionId": "aJobDefinitionId",
     "userId": "demo",
-    "timestamp": "2014-02-25T14:58:37",
+    "timestamp": "2014-02-25T14:58:37.000+0200",
     "operationId": "anOperationId",
     "operationType": "Claim",
     "entityType": "Task",
@@ -308,7 +313,7 @@ GET `/history/user-operation?operationType=Suspend&userId=demo`
     "jobId": null,
     "jobDefinitionId": null,
     "userId": "demo",
-    "timestamp": "2014-02-25T14:58:37",
+    "timestamp": "2014-02-25T14:58:37.000+0200",
     "operationId": "anOperationId",
     "operationType": "Suspend",
     "entityType": "ProcessInstance",

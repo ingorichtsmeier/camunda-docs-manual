@@ -51,6 +51,10 @@ A JSON object with the following properties:
     <td>skipCustomListeners</td>
     <td>Skip execution listener invocation for activities that are started or ended as part of this request.</td>
   </tr>
+  <tr>
+    <td>skipSubprocesses</td>
+    <td>Skip deletion of the subprocesses related to deleted processes as part of this request.</td>
+  </tr>
 </table>
 
 ## Response Body
@@ -161,10 +165,11 @@ Request Body:
 
     {
       "historicProcessInstanceQuery": {
-        "startedBefore": "2017-04-28T11:24:37"
+        "startedBefore": "2017-04-28T11:24:37.765+0200"
       },
       "deleteReason" : "aReason",
-      "skipCustomListeners" : true
+      "skipCustomListeners" : true,
+      "skipSubprocesses" : true
     }
 
 ## Response

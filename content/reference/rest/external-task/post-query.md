@@ -80,11 +80,11 @@ A JSON object with the following properties:
   </tr>
   <tr>
     <td>lockExpirationAfter</td>
-    <td>Restrict to external tasks that have a lock that expires after a given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to external tasks that have a lock that expires after a given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>lockExpirationBefore</td>
-    <td>Restrict to external tasks that have a lock that expires before a given date. The date must have the format <code>yyyy-MM-dd'T'HH:mm:ss</code>, e.g., <code>2013-01-23T14:42:45</code>.</td>
+    <td>Restrict to external tasks that have a lock that expires before a given date. By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>activityId</td>
@@ -147,6 +147,7 @@ A JSON object with the following properties:
   </tr>
 </table>
 
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 # Result
 
@@ -172,7 +173,14 @@ Each external task object has the following properties:
   <tr>
     <td>errorMessage</td>
     <td>String</td>
-    <td>The error message that was supplied when the last failure of this task was reported.</td>
+    <td>The full error message submitted with the latest reported failure executing this task;
+    <br/><code>null</code> if no failure was reported previously or if no error message was submitted</td>
+  </tr>
+  <tr>
+    <td>errorDetails</td>
+    <td>String</td>
+    <td>The error details submitted with the latest reported failure executing this task.
+    <br/><code>null</code> if no failure was reported previously or if no error details was submitted</td>
   </tr>
   <tr>
     <td>executionId</td>
@@ -233,7 +241,12 @@ Each external task object has the following properties:
     <td>priority</td>
     <td>Number</td>
     <td>The priority of the external task.</td>
-  </tr>  
+  </tr>
+  <tr>
+    <td>businessKey</td>
+    <td>String</td>
+    <td>The business key of the process instance the external task belongs to.</td>
+  </tr>
 </table>
 
 
@@ -285,9 +298,10 @@ Status 200.
       "activityId": "anActivityId",
       "activityInstanceId": "anActivityInstanceId",
       "errorMessage": "anErrorMessage",
+      "errorDetails": "anErrorDetails",
       "executionId": "anExecutionId",
       "id": "anExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.000+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "aProcessDefinitionKey",
       "processInstanceId": "aProcessInstanceId",
@@ -296,15 +310,17 @@ Status 200.
       "suspended": false,
       "workerId": "aWorkerId",
       "topicName": "aTopic",
-	  "priority": 9
+      "priority": 9,
+      "businessKey": "aBusinessKey"
     },
     {
       "activityId": "anotherActivityId",
       "activityInstanceId": "anotherActivityInstanceId",
       "errorMessage": "anotherErrorMessage",
+      "errorDetails": "anotherErrorDetails",
       "executionId": "anotherExecutionId",
       "id": "anotherExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.000+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "anotherProcessDefinitionKey",
       "processInstanceId": "anotherProcessInstanceId",
@@ -313,5 +329,6 @@ Status 200.
       "suspended": false,
       "workerId": "aWorkerId",
       "topicName": "aTopic",
-	  "priority": 3
+      "priority": 3,
+      "businessKey": "aBusinessKey"
     }]

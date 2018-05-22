@@ -37,6 +37,28 @@ GET `/history/process-definition/cleanable-process-instance-report`
     <td>Filter by process definition keys. Must be a comma-separated list of process definition keys.</td>
   </tr>
   <tr>
+    <td>tenantIdIn</td>
+    <td>Filter by a comma-separated list of tenant ids. A process definition must have one of the given tenant ids.</td>
+  </tr>
+  <tr>
+    <td>withoutTenantId</td>
+    <td>Only include process definitions which belong to no tenant. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>compact</td>
+    <td>Only include process instances which have more than zero finished instances. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>sortBy</td>
+    <td>Sort the results by a given criterion. Valid value is <code>finished</code>.
+    Must be used in conjunction with the <code>sortOrder</code> parameter.</td>
+  </tr>
+  <tr>
+    <td>sortOrder</td>
+    <td>Sort the results in a given order. Values may be <code>asc</code> for ascending order or <code>desc</code> for descending order.
+    Must be used in conjunction with the <code>sortBy</code> parameter.</td>
+  </tr>
+  <tr>
     <td>firstResult</td>
     <td>Pagination of results. Specifies the index of the first result to return.</td>
   </tr>
@@ -73,11 +95,6 @@ A JSON array containing finished process instance information relevant to histor
     <td>The name of the process definition.</td>
   </tr>
   <tr>
-    <td>processDefinitionName</td>
-    <td>String</td>
-    <td>The name of the process definition.</td>
-  </tr>
-  <tr>
     <td>processDefinitionVersion</td>
     <td>Number</td>
     <td>The version of the process definition.</td>
@@ -96,6 +113,11 @@ A JSON array containing finished process instance information relevant to histor
     <td>cleanableProcessInstanceCount</td>
     <td>Number</td>
     <td>The count of the cleanable historic process instances, referring to history time to live.</td>
+  </tr>
+  <tr>
+    <td>tenantId</td>
+    <td>String</td>
+    <td>The tenant id of the process definition.</td>
   </tr>
 </table>
 
@@ -136,8 +158,9 @@ GET `/history/process-definition/cleanable-process-instance-report`
     "processDefinitionName":"Invoice Receipt",
     "processDefinitionVersion":1,
     "historyTimeToLive":5,
-    "finishedProcessInstanceCount":100
-    "cleanableProcessInstanceCount":53
+    "finishedProcessInstanceCount":100,
+    "cleanableProcessInstanceCount":53,
+    "tenantId":"aTenantId"
   },
   {
     "processDefinitionId":"invoice:2:7bf79f13-ef95-11e6-b6e6-34f39ab71d4e",
@@ -145,8 +168,9 @@ GET `/history/process-definition/cleanable-process-instance-report`
     "processDefinitionName":"Invoice Receipt v2.0",
     "processDefinitionVersion":2,
     "historyTimeToLive":5,
-    "finishedProcessInstanceCount":1000
-    "cleanableProcessInstanceCount":13
+    "finishedProcessInstanceCount":1000,
+    "cleanableProcessInstanceCount":13,
+    "tenantId":"aTenantId"
   }
 ]
 ```

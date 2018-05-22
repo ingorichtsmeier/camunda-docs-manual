@@ -20,11 +20,13 @@ Run the Camunda BPM platform in every Java-runnable environment. Camunda BPM is 
 
 # Container/Application Server for Runtime Components (Excluding Camunda Cycle)
 
-* Apache Tomcat 6.0 / 7.0 / 8.0
-* JBoss Application Server 7.2 and JBoss EAP 6.1 / 6.2 / 6.3 / 6.4 / 7.0
-* Wildfly Application Server 8.2 / 10.1
+* Apache Tomcat 6.0 / 7.0 / 8.0 / 9.0
+* JBoss Application Server 7.2 and JBoss EAP 6.1 / 6.2 / 6.3 / 6.4 / 7.0 / 7.1
+* Wildfly Application Server 8.2 / 10.1 / 11.0
 * IBM WebSphere Application Server 8.0 / 8.5 / 9.0 ([Enterprise Edition only](http://camunda.com/bpm/enterprise/))
 *	Oracle WebLogic Server 12c (12R1,12R2) ([Enterprise Edition only](http://camunda.com/bpm/enterprise/))
+* Spring Boot application with embedded Tomcat (see [Supported versions]({{< relref "user-guide/spring-boot-integration/version-compatibility.md" >}}) 
+and [Deployment scenarios]({{< relref "user-guide/spring-boot-integration/index.md#supported-deployment-scenarios" >}})). 
 
 
 # Container for Camunda Cycle
@@ -37,11 +39,11 @@ Run the Camunda BPM platform in every Java-runnable environment. Camunda BPM is 
 ## Supported Database Products
 
 * MySQL 5.6 / 5.7
-* MariaDB 10.0
+* MariaDB 10.0 / 10.2
 * Oracle 10g / 11g / 12c
 * IBM DB2 9.7 /10.1 / 10.5 / 11.1 (excluding IBM z/OS for all versions)
 * PostgreSQL 9.1 / 9.3 / 9.4 / 9.6
-* Microsoft SQL Server 2008 R2/2012/2014 (see [Configuration Note]({{< relref "user-guide/process-engine/database.md#configuration-for-microsoft-sql-server" >}}))
+* Microsoft SQL Server 2008 R2/2012/2014/2016 (see [Configuration Note]({{< relref "user-guide/process-engine/database.md#configuration-for-microsoft-sql-server" >}}))
 * H2 1.4 (not recommended for [Cluster Mode]({{< relref "introduction/architecture.md#clustering-model" >}}) - see [Deployment Note]({{< relref "user-guide/process-engine/deployments.md" >}}))
 
 ## Database Clustering & Replication
@@ -54,7 +56,8 @@ Clustered or replicated databases are supported given the following conditions. 
 
 * Google Chrome latest
 * Mozilla Firefox latest
-* Internet Explorer 9 / 10 / 11
+* Internet Explorer 11
+* Microsoft Edge
 
 
 # Java

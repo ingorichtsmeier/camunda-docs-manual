@@ -55,112 +55,165 @@ The following list is an overview of all currently available patch scripts:
       <td>engine_7.1_patch_7.1.4_to_7.1.5.sql</td>
       <td>Add a missing index on foreign key to prevent deadlocks</td>
       <td>H2, MySQL, Oracle, PostgreSQL</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-2567">CAM-2567</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-2567">CAM-2567</a></td>
     </tr>
     <tr>
       <td>7.1</td>
       <td>engine_7.1_patch_7.1.9_to_7.1.10.sql</td>
       <td>Add a missing index on foreign key to prevent deadlocks</td>
       <td>DB2, SQL Server</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-3565">CAM-3565</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-3565">CAM-3565</a></td>
     </tr>
     <tr>
       <td>7.2</td>
       <td>engine_7.2_patch_7.2.4_to_7.2.5.sql</td>
       <td>Add a missing index on foreign key to prevent deadlocks. <strong>This is the same patch as engine_7.1_patch_7.1.9_to_7.1.10.sql</strong>.</td>
       <td>DB2, SQL Server</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-3565">CAM-3565</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-3565">CAM-3565</a></td>
     </tr>
     <tr>
       <td>7.2</td>
       <td>engine_7.2_patch_7.2.6_to_7.2.7.sql</td>
       <td>Add indices to improve deployment performance.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4497">CAM-4497</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4497">CAM-4497</a></td>
     </tr>
     <tr>
       <td>7.3</td>
       <td>engine_7.3_patch_7.3.0_to_7.3.1.sql</td>
       <td>Adjust column size of ACT_HI_JOB_LOG.ACT_ID_ to 255.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4037">CAM-4037</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4037">CAM-4037</a></td>
     </tr>
     <tr>
       <td>7.3</td>
       <td>engine_7.3_patch_7.3.2_to_7.3.3_1.sql</td>
       <td>Add a missing index on ACT_RU_AUTHORIZATION#RESOURCE_ID_ to prevent deadlocks.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4440">CAM-4440</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4440">CAM-4440</a></td>
     </tr>
     <tr>
       <td>7.3</td>
       <td>engine_7.3_patch_7.3.2_to_7.3.3_2.sql</td>
       <td>Add indices to improve deployment performance. <strong>This is the same patch as engine_7.2_patch_7.2.6_to_7.2.7.sql</strong>.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4497">CAM-4497</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4497">CAM-4497</a></td>
     </tr>
     <tr>
       <td>7.3</td>
       <td>engine_7.3_patch_7.3.5_to_7.3.6_1.sql</td>
       <td>Adjust column size of ACT_RU_JOB.PROCESS_DEF_KEY_ to 255.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4328">CAM-4328</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4328">CAM-4328</a></td>
     </tr>
     <tr>
       <td>7.3</td>
       <td>engine_7.3_patch_7.3.5_to_7.3.6_2.sql</td>
       <td>Add indices to improve performance of group authorizations.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-5364">CAM-5364</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-5364">CAM-5364</a></td>
     </tr>
     <tr>
       <td>7.4</td>
       <td>engine_7.4_patch_7.4.2_to_7.4.3_1.sql</td>
       <td>Add index to improve historic activity instance statistics query performance.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-5257">CAM-5257</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-5257">CAM-5257</a></td>
     </tr>
     <tr>
       <td>7.4</td>
       <td>engine_7.4_patch_7.4.2_to_7.4.3_2.sql</td>
       <td>Add a missing index on ACT_RU_EXT_TASK#EXECUTION_ID_ to prevent deadlocks.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-5440">CAM-5440</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-5440">CAM-5440</a></td>
     </tr>
     <tr>
       <td>7.4</td>
       <td>engine_7.4_patch_7.4.2_to_7.4.3_3.sql</td>
       <td>Add indices to improve performance of group authorizations. <strong>This is the same patch as engine_7.3_patch_7.3.5_to_7.3.6_2.sql</strong>.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-5364">CAM-5364</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-5364">CAM-5364</a></td>
     </tr>
     <tr>
       <td>7.4</td>
       <td>engine_7.4_patch_7.4.5_to_7.4.6.sql</td>
       <td>Adjust column size of ACT_RU_JOB.PROCESS_DEF_KEY_ to 255. <strong>This is the same patch as engine_7.3_patch_7.3.5_to_7.3.6_1.sql</strong>.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-4328">CAM-4328</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-4328">CAM-4328</a></td>
     </tr>
     <tr>
       <td>7.6</td>
       <td>engine_7.6_patch_7.6.0_to_7.6.1.sql</td>
       <td>Adjust column size of ACT_RU_EVENT_SUBSCR.ACTIVITY_ID_ to 255.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-6788">CAM-6788</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-6788">CAM-6788</a></td>
     </tr>
     <tr>
       <td>7.6</td>
       <td>engine_7.6_patch_7.6.2_to_7.6.3_1.sql</td>
       <td>Add a missing index on ACT_RU_EXT_TASK#ERROR_DETAILS_ID_ to prevent deadlocks.</td>
       <td>All databases</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-7263">CAM-7263</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-7263">CAM-7263</a></td>
     </tr>
     <tr>
       <td>7.6</td>
       <td>engine_7.6_patch_7.6.2_to_7.6.3_2.sql</td>
       <td>Remove an incorrect index ACT_RU_JOB#ACT_IDX_JOB_HANDLER for MSSQL Server.</td>
       <td>MSSQL Server</td>
-      <td><a href="https://app.camunda.com/jira/browse/CAM-7442">CAM-7442</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-7442">CAM-7442</a></td>
+    </tr>
+    <tr>
+      <td>7.7</td>
+      <td>engine_7.7_patch_7.7.3_to_7.7.4.sql</td>
+      <td>Insert new startup.lock in ACT_GE_PROPERTY.</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8162">CAM-8162</a></td>
+    </tr>
+    <tr>
+      <td>7.7</td>
+      <td>engine_7.7_patch_7.7.4_to_7.7.5_1.sql</td>
+      <td>Add indices to improve performance of history cleanup</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8184">CAM-8184</a></td>
+    </tr>
+    <tr>
+      <td>7.7</td>
+      <td>engine_7.7_patch_7.7.4_to_7.7.5_2.sql</td>
+      <td>Increase the field length of ACT_RU_AUTHORIZATION.RESOURCE_ID_</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8177">CAM-8177</a></td>
+    </tr>
+    <tr>
+      <td>7.7</td>
+      <td>engine_7.7_patch_7.7.5_to_7.7.6.sql</td>
+      <td>Add indices to improve historic activity instance statistics</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8485">CAM-8485</a></td>
+    </tr>
+    <tr>
+      <td>7.8</td>
+      <td>engine_7.8_patch_7.8.0_to_7.8.1.sql</td>
+      <td>Add indices to improve historic activity instance statistics. <strong>This is the same patch as engine_7.7_patch_7.7.5_to_7.7.6.sql</strong>.</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8485">CAM-8485</a></td>
+    </tr>
+    <!-- ADD WHEN RELEASING 7.7.9
+    <tr>
+    <td>7.7</td>
+      <td>engine_7.7_patch_7.7.8_to_7.7.9.sql</td>
+      <td>Add indexes on Process Definition ID and End Time for Historic Process Instance and Historic Activity Instance</td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8833">CAM-8833</a></td>
+    </tr> -->
+    <tr>
+      <td>7.8</td>
+      <td>engine_7.8_patch_7.8.4_to_7.8.5.sql</td>
+      <td>Add indexes on Process Definition ID and End Time for Historic Process Instance and Historic Activity Instance.
+      <!-- ADD WHEN RELEASING 7.7.9
+      <strong>This is the same patch as engine_7.7_patch_7.7.8_to_7.7.9.sql</strong>. -->
+      </td>
+      <td>All databases</td>
+      <td><a href="https://app.camunda.com/jira/browse/CAM-8833">CAM-8833</a></td>
     </tr>
   </tbody>
 </table>
@@ -180,6 +233,81 @@ The process engine no longer evaluates these expressions by default and throws a
 
 See the user guide on [security considerations for custom code]({{< relref "user-guide/process-engine/securing-custom-code.md" >}}) for details.
 
+
+## 7.6.10 to 7.6.11 / 7.7.5 to 7.7.6 / 7.8.0 to 7.8.1
+
+### Java serialization format
+
+You can now configure, if you forbid the usage of Java serialization format, when passing object variables in their Java serialized representation.
+
+The new [configuration parameter `javaSerializationFormatEnabled`]({{< relref "reference/deployment-descriptors/tags/process-engine.md#javaSerializationFormatEnabled" >}}) 
+defaults to `true`, but can be configured to `false` in Camunda engine configuration.
+
+Following use cases are affected:
+
+* REST API:
+
+```json
+PUT /process-instance/{id}/variables/{varName}
+
+{
+  "value" : "ab",
+  "type" : "Object",
+  "valueInfo" : {
+    "objectTypeName": "com.example.MyObject",
+    "serializationDataFormat": "application/x-java-serialized-object"
+  }
+}
+``` 
+
+* Java API:
+
+```java
+runtimeService.setVariable(processInstanceId, "varName",
+        Variables
+          .serializedObjectValue("ab")
+          .serializationDataFormat("application/x-java-serialized-object")
+          .objectTypeName("com.example.MyObject")
+          .create());
+```
+
+You can disable Java serialization usage with the help of [this configuration parameter]({{< relref "reference/deployment-descriptors/tags/process-engine.md#javaSerializationFormatEnabled" >}}):
+
+```xml
+<property name="javaSerializationFormatEnabled">false</property>
+```
+
+### Groovy version
+
+The pre-built Camunda distributions of versions 7.6.10, 7.7.5 and 7.8.0 ship with Groovy library of version 2.4.5, whereas newer versions come with Groovy 2.4.13. 
+Please updade the library `groovy-all-$GROOVY_VERSION.jar` in the `lib` folder of your application server.
+
+
+## 7.8.1. to 7.8.2 
+
+### Restrict heatmap/statistics by time period  
+
+In the historic process definition diagram it is possible to select time periods for which activity instance badges are displayed.
+
+By default the displayed timer period is set to 'today' but can be extended to show badges of 'this week', 'this month' or the 'complete' history.   
+
+This feature can be configured in two ways:
+
+1. The default timer period can be changed to 'this week', 'this month' or 'complete'
+2. The manual seletion of the time period within cockpit can be disabled.   
+
+These attributes can be modifed in the [configuration file]({{< relref "webapps/cockpit/extend/configuration.md#historic-activity-instance-metrics" >}})
+
+## 7.8.6 to 7.8.7
+
+### History cleanup can be parallelized
+
+As of v. 7.9.0, history cleanup can be parallelized, which leads to creation of several jobs in the database. For this reason:
+
+* call to `HistoryService#cleanupHistoryAsync` does not guarantee to return correct Job object in return and you should not rely on the returned value any more.
+ The same valid for REST call `POST /history/cleanup`
+* `HistoryService#findHistoryCleanupJob` is deprecated (as well as `GET /history/cleanup/job`), one should use `HistoryService#findHistoryCleanupJobs` instead.
+   
 # Full Distribution
 
 This section is applicable if you installed the [Full Distribution]({{< relref "introduction/downloading-camunda.md#full-distribution" >}}) with a **shared process engine**. In this case you need to update the libraries and applications installed inside the application server.

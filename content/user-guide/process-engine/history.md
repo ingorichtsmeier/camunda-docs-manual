@@ -78,7 +78,7 @@ The default history database writes History Events to the appropriate database t
 There are the following History entities, which - in contrast to the runtime data - will also remain present in the DB after process and case instances have been completed:
 
 * `HistoricProcessInstances` containing information about current and past process instances.
-* `HistoricProcessVariables` containing information about the latest state a variable held in a process instance.
+* `HistoricVariableInstances` containing information about the latest state a variable held in a process instance.
 * `HistoricCaseInstances` containing information about current and past case instances.
 * `HistoricActivityInstances` containing information about a single execution of an activity.
 * `HistoriCasecActivityInstances` containing information about a single execution of a case activity.
@@ -108,7 +108,7 @@ Among them following states can be triggered externally, for example through RES
 ## Query History
 
 The HistoryService exposes the methods `createHistoricProcessInstanceQuery()`,
-`createHistoricProcessVariableQuery()`, `createHistoricCaseInstanceQuery()`,
+`createHistoricVariableInstanceQuery()`, `createHistoricCaseInstanceQuery()`,
 `createHistoricActivityInstanceQuery()`, `createHistoricCaseActivityInstanceQuery()`,
 `createHistoricDetailQuery()`,
 `createHistoricTaskInstanceQuery()`,
@@ -172,14 +172,14 @@ historyService.createHistoricCaseActivityInstanceQuery()
   .listPage(0, 1);
 ```
 
-**HistoricProcessVariableQuery**
+**HistoricVariableInstanceQuery**
 
-Get all HistoricProcessVariables from a finished process instance with id 'XXX', ordered by variable name.
+Get all HistoricVariableInstances from a finished process instance with id 'XXX', ordered by variable name.
 
 ```java
-historyService.createHistoricProcessVariableQuery()
+historyService.createHistoricVariableInstanceQuery()
   .processInstanceId("XXX")
-  .orderByVariableName.desc()
+  .orderByVariableName().desc()
   .list();
 ```
 
@@ -571,12 +571,28 @@ The following describes the operations logged in the user operation log and the 
   <tr>
     <td></td>
     <td>Delete</td>
-    <td><i>No additional property is logged</i></td>
+    <td>
+      In case of regular operation:
+      <ul><i>No additional property is logged</i></ul>
+      In case of batch operation:
+      <ul>
+        <li><strong>nrOfInstances</strong>: the amount of process instances that were deleted</li>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch, <code>false</code> if operation was performed synchronously</li>
+        <li><strong>deleteReason</strong>: the reason for deletion</li>
+        <li><strong>type</strong>: <code>history</code> in case of deletion of historic process instances</li>
+      </ul>
+    </td>
   </tr>
   <tr>
     <td></td>
     <td>ModifyProcessInstance</td>
-    <td><i>No additional property is logged</i></td>
+    <td>
+      <ul>
+        <li><strong>nrOfInstances</strong>: The amount of process instances modified</li>
+        <li><strong>async</strong>: <code>true</code> if modification was performed asynchronously as a batch, <code>false</code> if modification was performed synchronously</li>
+        <li><strong>processDefinitionVersion</strong>: The version of the process definition</li>
+      </ul>
+	</td>
   </tr>
   <tr>
     <td></td>
@@ -595,6 +611,16 @@ The following describes the operations logged in the user operation log and the 
         <li><strong>processDefinitionId</strong>: The id of the process definition that instances are migrated to</li>
         <li><strong>nrOfInstances</strong>: The amount of process instances migrated</li>
         <li><strong>async</strong>: <code>true</code> if migration was performed asynchronously as a batch, <code>false</code> if migration was performed synchronously</li>
+      </ul>
+    </td>
+  </tr>
+   <tr>
+    <td></td>
+    <td>RestartProcessInstance</td>
+    <td>
+      <ul>
+        <li><strong>nrOfInstances</strong>: The amount of process instances restarted</li>
+        <li><strong>async</strong>: <code>true</code> if restart was performed asynchronously as a batch, <code>false</code> if restart was performed synchronously</li>
       </ul>
     </td>
   </tr>
@@ -706,6 +732,15 @@ The following describes the operations logged in the user operation log and the 
       </ul>
     </td>
   </tr>
+   <tr>
+    <td></td>
+    <td>UpdateHistoryTimeToLive</td>
+    <td>
+      <ul>
+        <li><strong>historyTimeToLive</strong>: the new history time to live.</li>
+      </ul>
+    </td>
+  </tr>
   <tr>
     <td>Job</td>
     <td>ActivateJob</td>
@@ -730,6 +765,8 @@ The following describes the operations logged in the user operation log and the 
     <td>
       <ul>
         <li><strong>retries</strong>: the new number of retries</li>
+        <li><strong>nrOfInstances</strong>: the number of jobs that were updated.</li>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch, <code>false</code> if operation was performed synchronously</li>
       </ul>
     </td>
   </tr>
@@ -739,6 +776,7 @@ The following describes the operations logged in the user operation log and the 
     <td>
       <ul>
         <li><strong>suspensionState</strong>: the new suspension state <code>suspended</code></li>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch, <code>false</code> if operation was performed synchronously</li>
       </ul>
     </td>
   </tr>
@@ -791,6 +829,29 @@ The following describes the operations logged in the user operation log and the 
     <td>
       <ul>
         <li><strong>suspensionState</strong>: the new suspension state <code>suspended</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>ExternalTask</td>
+    <td>SetExternalTaskRetries</td>
+    <td>
+      <ul>
+        <li><strong>retries</strong>: the new number of retries</li>
+        <li><strong>nrOfInstances</strong>: the amount of external tasks that were updated</li>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch, <code>false</code> if operation was performed synchronously</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>DecisionInstance</td>
+    <td>Delete</td>
+    <td>
+      <ul>
+        <li><strong>nrOfInstances</strong>: the amount of decision instances that were deleted</li>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch, <code>false</code> if operation was performed synchronously</li>
+        <li><strong>type</strong>: by default <code>history</code> because, this operations only concerns historic decision instances</li>
+        <li><strong>deleteReason</strong>: the reason for deletion</li>
       </ul>
     </td>
   </tr>
@@ -880,8 +941,11 @@ data from history tables. It deletes:
 * Historic process instances plus all related historic data (e.g., historic variable instances, historic task instances, all comments and attachments related to them, etc.)
 * Historic decision instances plus all related historic data (i.e., historic decision input and output instances)
 * Historic case instances plus all related historic data (e.g., historic variable instances, historic task instances, etc.)
+* Historic batches plus all related historic data (historic incidents and job logs)
 
 History cleanup can be used on a regular basis (automatically) or for a single cleanup (manual call).
+
+Only [camunda-admins]({{< relref "user-guide/process-engine/authorization-service.md#the-camunda-admin-group">}}) have permissions to execute history cleanup.
 
 ## History Time to Live
 
@@ -942,7 +1006,48 @@ the global configuration of the batch operations will be taken into account.
 
 ## Periodic Run
 
-To use history cleanup on a regular basis, a batch window must be configured - the period of time during the day when the cleanup job is to run. 
+To use history cleanup on a regular basis, a batch window(s) must be configured - the period of time during the day when the cleanup is to run. 
+It is possible to configure one and the same batch window for every day:
+```xml
+<property name="historyCleanupBatchWindowStartTime">20:00</property>
+<property name="historyCleanupBatchWindowEndTime">06:00</property>
+```
+
+Or per weekday:
+
+```java
+ProcessEngineConfigurationImpl configuration = ...;
+//night time for working days
+configuration.getHistoryCleanupBatchWindows().put(Calendar.MONDAY, new BatchWindowConfiguration("20:00", "06:00"));
+configuration.getHistoryCleanupBatchWindows().put(Calendar.TUESDAY, new BatchWindowConfiguration("20:00", "06:00"));
+configuration.getHistoryCleanupBatchWindows().put(Calendar.WEDNESDAY, new BatchWindowConfiguration("20:00", "06:00"));
+configuration.getHistoryCleanupBatchWindows().put(Calendar.THURSDAY, new BatchWindowConfiguration("20:00", "06:00"));
+configuration.getHistoryCleanupBatchWindows().put(Calendar.FRIDAY, new BatchWindowConfiguration("20:00", "06:00"));
+//the whole day for weekend
+configuration.getHistoryCleanupBatchWindows().put(Calendar.SATURDAY, new BatchWindowConfiguration("06:00", "06:00"));
+configuration.getHistoryCleanupBatchWindows().put(Calendar.SUNDAY, new BatchWindowConfiguration("06:00", "06:00"));
+```
+
+The same in XML format:
+
+```xml
+<property name="mondayHistoryCleanupBatchWindowStartTime">20:00</property>
+<property name="mondayHistoryCleanupBatchWindowEndTime">06:00</property>
+<property name="tuesdayHistoryCleanupBatchWindowStartTime">20:00</property>
+<property name="tuesdayHistoryCleanupBatchWindowEndTime">06:00</property>
+<property name="wednesdayHistoryCleanupBatchWindowStartTime">20:00</property>
+<property name="wednesdayHistoryCleanupBatchWindowEndTime">06:00</property>
+<property name="thursdayHistoryCleanupBatchWindowStartTime">20:00</property>
+<property name="thursdayHistoryCleanupBatchWindowEndTime">06:00</property>
+<property name="fridayHistoryCleanupBatchWindowStartTime">20:00</property>
+<property name="fridayHistoryCleanupBatchWindowEndTime">06:00</property>
+
+<property name="saturdayHistoryCleanupBatchWindowStartTime">06:00</property>
+<property name="saturdayHistoryCleanupBatchWindowEndTime">06:00</property>
+<property name="sundayHistoryCleanupBatchWindowStartTime">06:00</property>
+<property name="sundayHistoryCleanupBatchWindowEndTime">06:00</property>
+``` 
+
 See [Configuration options][configuration-options] for details.
 
 ## Manual Run
@@ -951,16 +1056,16 @@ When you only want to run the cleanup a single time, then use:
 ```java
   processEngine.getHistoryService().cleanUpHistoryAsync(true);
 ```
-Also available via [REST API]({{< relref "reference/rest/history/post-history-cleanup.md">}}).
+Also available via [REST API]({{< relref "reference/rest/history/history-cleanup/post-history-cleanup.md">}}).
 
 ## Internal Implementation
 
-History cleanup is implemented as a job. The cleanup job runs in the background every day at the batch window time or immediately when called manually. 
-It removes all historic data for process (or decision or case) instances that finished "history time to live" days ago. The data is removed in batches of 
+History cleanup is implemented via jobs. The cleanup jobs run in the background every day at the batch window time or immediately when called manually. 
+The jobs remove all historic data for process (or decision or case) instances that finished "history time to live" days ago. The data is removed in batches of 
 configurable size (see [Configuration options][configuration-options]). Only top-level objects (e.g., historic process instances) are counted when finding 
 a batch of data to be deleted.
 
-In cases when a job can't find anything to delete (or not enough data to surpass the threshold), it is rescheduled for a later time, until it reaches 
+In cases when a history cleanup job can't find anything to delete (or not enough data to surpass the threshold), it is rescheduled for a later time, until it reaches 
 the end time of the batch window. The delay between such runs increases twofold, until it reaches the maximum value (1 hour). This backoff behaviour 
 only happens in case of regular scheduled runs. In case of a manual run, cleanup stops when there is no more data to be deleted.
 
@@ -970,15 +1075,18 @@ several retries, an incident is created. After this, the job isn't triggered unl
 
 * History cleanup is called manually
 * Engine is restarted (this resets the number of job retries to the default value)
-* Manually set the number of retries to >0 for the history cleanup job (e.g., via the [REST API]({{< relref "reference/rest/job/put-set-job-retries.md">}})) 
+* Manually set the number of retries to >0 for the history cleanup job(s) (e.g., via the [REST API]({{< relref "reference/rest/job/put-set-job-retries.md">}})) 
 
 ## Job Progress
 
-History cleanup is performed within a single job that runs several times. This job has a unique id which can be 
-found in the response of the history cleanup call. It can also be found with this request:
+History cleanup is performed via fixed amount of jobs (can be configured via `historyCleanupDegreeOfParallelism` configuration parameter). 
+Each job runs several times and has a unique id which can be found like this:
 ```java
-String historyCleanupJobId = processEngine.getHistoryService()
-        .findHistoryCleanupJob().getJobId();
+List<Job> historyCleanupJobs = processEngine.getHistoryService().findHistoryCleanupJobs();
+for (Job job: historyCleanupJobs) {
+  String jobId = job.getJobId();
+  ...
+}
 ```
 
 The `jobId` can be used to request [job logs]({{< relref "reference/rest/history/job-log/get-job-log-query.md">}}) 

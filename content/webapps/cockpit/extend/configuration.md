@@ -32,6 +32,30 @@ and can override the standard styles.
   border-bottom-color: blue;
 }
 ```
+# Localization
+
+The localization of Cockpit is contained in the `app/cockpit/locales/` directory. This
+directory contains a separate localization file for every available language. The file name
+consists of the language code and the suffix `.json` (e.g., `en.json`).
+
+Cockpit uses a locale file corresponding to the language settings of the browser. You can
+set the `availableLocales` property in the configuration file to provide a list of available
+locales. Every locale which is contained in this list must have a locale file in the `locales`
+directory with the corresponding language code.
+
+If the browser uses a language which is not available, Cockpit uses the locale which is
+defined via the `fallbackLocale` property in the configuration file:
+
+```javascript
+"locales": {
+  "availableLocales": ["en", "de"],
+  "fallbackLocale": "en"
+}
+```
+
+To create a new localization for Cockpit, copy the provided language file, translate it and
+save it as new localization file with the corresponding language code. To make the new translation
+available, add it to the list of available locales in the configuration file.
 
 # Custom Scripts
 
@@ -68,6 +92,44 @@ require(config.deps, callback);
 ```
 
 You can find a complete example about how to use `customScripts` to develop a Cockpit Plugin in the [Camunda BPM examples repository](https://github.com/camunda/camunda-bpm-examples/tree/master/cockpit/js-only-plugin).
+
+# skipCustomListeners Flag
+
+You can configure skipCustomListeners flag globally for cockpit by adding a `skipCustomListeners` property in `app/cockpit/scripts/config.js`:
+
+```javascript
+   window.camCockpitConf = {
+     skipCustomListeners: {
+       default: true, // default value for skipCustomListeners is true
+       hidden: false  // skipCustomListeners checkbox is not hidden
+     }
+   };
+```
+By default (if not configured), the `skipCustomListeners` flag value is `true`. However, you can set the default value of the flag (`true | false`)
+in the `default` property in `skipCustomListeners` configuration.
+
+Moreover, the checkbox to enable/disable skipCustomListeners is by default not hidden in Cockpit. You can set this behaviour by configuring the property
+`hidden` (`true | false`) in `skipCustomListeners` configuration. If the `hidden` value is configured to be false, then the skipCustomListeners checkbox 
+will be hidden everywhere in Cockpit.
+
+# Historic Activity Instance Metrics
+
+ ```javascript
+    window.camCockpitConf = {
+       historicActivityInstanceMetrics: {
+         adjustablePeriod: true,
+         //select from the default time period: today, week, month, complete
+         period: {
+           unit: 'today'
+         }
+       }
+    };
+ ```
+ By default, the `adjustablePeriod` flag value is `true`. Setting it to false disables the ability in the process definition history view to manually select the time period for which the activity instances are displayed. 
+ the `unit` property of `period` allows to specify the default timer period for which the activity instance badges are supposed to be shown. 
+ Here it is possible to select form the range of values: `today`, `week`,`month`,`complete`;  
+ 
+
 
 # Advanced Styles Customization
 

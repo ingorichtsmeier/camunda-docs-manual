@@ -43,6 +43,11 @@ A JSON object with the following properties:
 	<td>A boolean value, which indicates whether the task should be fetched based on its priority or arbitrarily.</td>
   </tr>
   <tr>
+	<td>asyncResponseTimeout</td>
+	<td>The <a href="{{< relref "user-guide/process-engine/external-tasks.md#long-polling-to-fetch-and-lock-external-tasks" >}}">Long Polling</a> timeout in milliseconds.<br>
+	<strong>Note:</strong> The value cannot be set larger than 1.800.000 milliseconds (corresponds to 30 minutes).</td>
+  </tr>
+  <tr>
     <td>topics</td>
     <td>
       <p>
@@ -64,6 +69,18 @@ A JSON object with the following properties:
         <tr>
           <td>variables</td>
           <td>A JSON array of <code>String</code> values that represent variable names. For each result task belonging to this topic, the given variables are returned as well if they are accessible from the external task's execution. If not provided - all variables will be fetched.</td>
+        </tr>
+        <tr>
+          <td>localVariables</td>
+          <td>If <code>true</code> only local variables will be fetched.</td>
+        </tr>
+        <tr>
+          <td>businessKey</td>
+          <td>A <code>String</code> value which enables the filtering of tasks based on process instance business key.</td>
+        </tr>
+        <tr>
+          <td>processVariables</td>
+          <td>A <code>JSON</code> object used for filtering tasks based on process instance variable values. A property name of the object represents a process variable name, while the property value represents the process variable value to filter tasks by.</td>
         </tr>
         <tr>
           <td>deserializeValues</td>
@@ -105,7 +122,14 @@ Each locked external task object has the following properties:
   <tr>
     <td>errorMessage</td>
     <td>String</td>
-    <td>The error message that was supplied when the last failure of this task was reported.</td>
+    <td>The full error message submitted with the latest reported failure executing this task;
+    <br/><code>null</code> if no failure was reported previously or if no error message was submitted</td>
+  </tr>
+  <tr>
+    <td>errorDetails</td>
+    <td>String</td>
+    <td>The error details submitted with the latest reported failure executing this task.
+    <br/><code>null</code> if no failure was reported previously or if no error details was submitted</td>
   </tr>
   <tr>
     <td>executionId</td>
@@ -161,6 +185,11 @@ Each locked external task object has the following properties:
     <td>topicName</td>
     <td>String</td>
     <td>The topic name of the external task.</td>
+  </tr>
+  <tr>
+    <td>businessKey</td>
+    <td>String</td>
+    <td>The business key of the process instance the external task belongs to.</td>
   </tr>
   <tr>
     <td>variables</td>
@@ -220,9 +249,10 @@ Status 200.
       "activityId": "anActivityId",
       "activityInstanceId": "anActivityInstanceId",
       "errorMessage": "anErrorMessage",
+      "errorDetails": "anErrorDetails",
       "executionId": "anExecutionId",
       "id": "anExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.000+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "aProcessDefinitionKey",
       "processInstanceId": "aProcessInstanceId",
@@ -243,9 +273,10 @@ Status 200.
       "activityId": "anActivityId",
       "activityInstanceId": "anActivityInstanceId",
       "errorMessage": "anErrorMessage",
+      "errorDetails": "anotherErrorDetails",
       "executionId": "anExecutionId",
       "id": "anExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.000+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "aProcessDefinitionKey",
       "processInstanceId": "aProcessInstanceId",
@@ -291,9 +322,10 @@ Status 200.
       "activityId": "anActivityId",
       "activityInstanceId": "anActivityInstanceId",
       "errorMessage": "anErrorMessage",
+      "errorDetails": "anErrorDetails",
       "executionId": "anExecutionId",
       "id": "anExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.00+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "aProcessDefinitionKey",
       "processInstanceId": "aProcessInstanceId",
@@ -302,6 +334,7 @@ Status 200.
       "workerId": "aWorkerId",
       "priority": 4,
       "topicName": "createOrder",
+      "businessKey": "aBusinessKey",
       "variables": {
         "orderId": {
           "type": "String",
@@ -314,9 +347,10 @@ Status 200.
       "activityId": "anActivityId",
       "activityInstanceId": "anActivityInstanceId",
       "errorMessage": "anErrorMessage",
+      "errorDetails": "anotherErrorDetails",
       "executionId": "anExecutionId",
       "id": "anExternalTaskId",
-      "lockExpirationTime": "2015-10-06T16:34:42",
+      "lockExpirationTime": "2015-10-06T16:34:42.000+0200",
       "processDefinitionId": "aProcessDefinitionId",
       "processDefinitionKey": "aProcessDefinitionKey",
       "processInstanceId": "aProcessInstanceId",
@@ -325,6 +359,7 @@ Status 200.
       "workerId": "aWorkerId",
       "priority": 0,
       "topicName": "createOrder",
+      "businessKey": "aBusinessKey",
       "variables": {
         "orderId": {
           "type": "String",

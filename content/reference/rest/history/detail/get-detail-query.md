@@ -36,6 +36,10 @@ GET `/history/detail`
     <td>Filter by process instance id.</td>
   </tr>
   <tr>
+    <td>processInstanceIdIn</td>
+    <td>Only include historic details which belong to one of the passed process instance ids.</td>
+  </tr>
+  <tr>
     <td>executionId</td>
     <td>Filter by execution id.</td>
   </tr>
@@ -56,6 +60,10 @@ GET `/history/detail`
     <td>Filter by variable instance id.</td>
   </tr>
   <tr>
+    <td>variableTypeIn</td>
+    <td>Only include historic details where the variable updates belong to one of the passed and comma-separated variable types. A list of all supported variable types can be found <a href="{{< relref "user-guide/process-engine/variables.md#supported-variable-values" >}}">here</a>. <b>Note:</b> All non-primitive variables are assoziated with the type "serializable".</td>
+  </tr>
+  <tr>
     <td>tenantIdIn</td>
     <td>Filter by a comma-separated list of tenant ids.</td>
   </tr>
@@ -74,6 +82,14 @@ GET `/history/detail`
   <tr>
     <td>excludeTaskDetails</td>
     <td>Excludes all task-related <strong>HistoricDetails</strong>, so only items which have no task id set will be selected. When this parameter is used together with <code>taskId</code>, this call is ignored and task details are <strong>not</strong> excluded. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>occurredBefore</td>
+    <td>Restrict to historic details that occured before the given date (including the date). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>occurredAfter</td>
+    <td>Restrict to historic details that occured after the given date (including the date). By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>sortBy</td>
@@ -186,9 +202,11 @@ Each historic detail object has the following properties:
   <tr>
     <td>time</td>
     <td>String</td>
-    <td>The time when this historic detail occurred has the format <code>yyyy-MM-dd'T'HH:mm:ss</code>.</td>
+    <td>The time when this historic detail occurred, default format* <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>.</td>
   </tr>
 </table>
+
+\* For further information, please see the <a href="{{< relref "reference/rest/overview/date-format.md" >}}"> documentation</a>.
 
 Depending on the type of the historic detail it contains further properties. In case of an <code>HistoricVariableUpdate</code> the following properties are also provided:
 
@@ -302,7 +320,7 @@ GET `/history/detail?processInstanceId=3cd597b7-001a-11e7-8c6b-34f39ab71d4e`
     "taskId": null,
     "tenantId": null,
     "userOperationId": "3cd76c7f-001a-11e7-8c6b-34f39ab71d4e",
-    "time": "2017-03-03T15:03:54",
+    "time": "2017-03-03T15:03:54.000+0200",
     "variableName": "amount",
     "variableInstanceId": "3cd65b08-001a-11e7-8c6b-34f39ab71d4e",
     "variableType": "Double",
@@ -326,7 +344,7 @@ GET `/history/detail?processInstanceId=3cd597b7-001a-11e7-8c6b-34f39ab71d4e`
     "taskId": null,
     "tenantId": null,
     "userOperationId": "3cd76c7f-001a-11e7-8c6b-34f39ab71d4e",
-    "time": "2017-03-03T15:03:54",
+    "time": "2017-03-03T15:03:54.000+0200",
     "variableName": "invoiceDocument",
     "variableInstanceId": "3cd65b0a-001a-11e7-8c6b-34f39ab71d4e",
     "variableType": "File",

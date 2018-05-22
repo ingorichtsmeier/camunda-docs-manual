@@ -21,9 +21,13 @@ A Business Rule Task is used to synchronously execute one or more rules.
 You can use the Camunda DMN engine integration to evaluate a DMN decision. You have
 to specify the decision key to evaluate as the `camunda:decisionRef` attribute. Additionally, 
 the `camunda:decisionRefBinding` specifies which version of the decision should be evaluated.
-Valid values are `deployment`, which evaluates the decision version which was deployed with the process
-version, `latest` which will always evaluate the latest decision version and `version` which
-allows you to specify a specific version to execute with the `camunda:decisionRefVersion` attribute.
+Valid values are:
+
+* `deployment`, which evaluates the decision version which was deployed with the process
+version,
+* `latest` which will always evaluate the latest decision version,
+* `version` which allows you to specify a specific version to execute with the `camunda:decisionRefVersion` attribute, and
+* `versionTag` which allows you to specify a specific version tag to execute with the `camunda:decisionRefVersionTag` attribute.
 
 ```xml
 <businessRuleTask id="businessRuleTask"
@@ -39,7 +43,7 @@ The `camunda:decisionRefBinding` attribute defaults to `latest`.
     camunda:decisionRef="myDecision" />
 ```
 
-The attributes `camunda:decisionRef` and `camunda:decisionRefVersion` can both be specified as
+The attributes `camunda:decisionRef`, `camunda:decisionRefVersion`, and `camunda:decisionRefVersionTag` can be specified as
 an expression which will be evaluated on execution of the task.
 
 ```xml
@@ -140,6 +144,7 @@ In addition to the above, a Business Rule Task can be implemented via the [Exter
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#decisionrefbinding" >}}">camunda:decisionRefBinding</a>,
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#decisionreftenantid" >}}">camunda:decisionRefTenantId</a>,
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#decisionrefversion" >}}">camunda:decisionRefVersion</a>,
+      <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#decisionrefversiontag" >}}">camunda:decisionRefVersionTag</a>,
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#delegateexpression" >}}">camunda:delegateExpression</a>,
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#exclusive" >}}">camunda:exclusive</a>,
       <a href="{{< relref "reference/bpmn20/custom-extensions/extension-attributes.md#expression" >}}">camunda:expression</a>,

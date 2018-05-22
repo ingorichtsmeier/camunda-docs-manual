@@ -65,6 +65,27 @@ In addition, other *service-task-like* elements such as send tasks, business rul
 
 See the [REST API documentation]({{< relref "reference/rest/external-task/index.md" >}}) for how the API operations can be accessed via HTTP.
 
+### Long Polling to Fetch and Lock External Tasks
+
+Ordinary HTTP requests are immediately answered by the server, regardless of whether the requested information 
+is available or not. This inevitably leads to a situation where the client has to perform multiple recurring requests until 
+the information is available (polling). This approach can obviously be expensive in terms of resources.
+
+{{< img src="../img/external-task-long-polling.png" alt="Long polling to fetch and lock external tasks" >}}
+
+With the aid of long polling, a request is suspended by the server if no external tasks are available. As soon as new 
+external tasks occur, the request is reactivated and the response is performed. The suspension is limited to a 
+configurable period of time (timeout).
+
+Long polling significantly reduces the number of requests and enables using resources more efficiently on both 
+the server and the client side.
+
+Please also see the [REST API documentation]({{< relref "reference/rest/external-task/fetch.md" >}}).
+
+{{< note title="Heads Up!" class="info" >}}
+This feature is based on JAX-RS 2.0 and is therefore not available on **IBM WebSphere Application Server 8.0 / 8.5**.
+{{< /note >}}
+
 ## Java API
 
 The entry point to the Java API for external tasks is the `ExternalTaskService`. It can be accessed via `processEngine.getExternalTaskService()`.
@@ -289,7 +310,7 @@ When an external task is locked by a worker, the lock duration can be extended b
 
 ### Reporting Task Failure
 
-A worker may not always be able to complete a task successfully. In this case it can report a failure to the process engine by using `ExternalTaskService#handleFailure`. Like `#complete`, `#handleFailure` can only be invoked by the worker possessing the most recent lock for a task. The `#handleFailure` method takes four additional arguments: `errorMessage`,`errorDetails`, `retries`, `retryTimeout`. The error message can contain a description of the nature of the problem and is limited to 666 characters. It can be accessed when the task is fetched again or is queried for. The `errorDetails` are containing full error description and are unlimited in legth, error details are accessible through the separate method, based on task id. With `retries` and `retryTimout`, workers can specify a retry strategy. When setting `retries` to a value > 0, the task can be fetched again after `retryTimeout` expires. When setting retries to 0, a task can no longer be fetched and an incident is created for this task.
+A worker may not always be able to complete a task successfully. In this case it can report a failure to the process engine by using `ExternalTaskService#handleFailure`. Like `#complete`, `#handleFailure` can only be invoked by the worker possessing the most recent lock for a task. The `#handleFailure` method takes four additional arguments: `errorMessage`,`errorDetails`, `retries`, `retryTimeout`. The error message can contain a description of the nature of the problem and is limited to 666 characters. It can be accessed when the task is fetched again or is queried for. The `errorDetails` can contain the full error description and are unlimited in length. Error details are accessible through the separate method `ExternalTaskService#getExternalTaskErrorDetails`, based on task id parameter. With `retries` and `retryTimout`, workers can specify a retry strategy. When setting `retries` to a value > 0, the task can be fetched again after `retryTimeout` expires. When setting retries to 0, a task can no longer be fetched and an incident is created for this task.
 
 Consider the following code snippet:
 

@@ -81,29 +81,29 @@ The following Entity Relationship Diagrams visualize the database tables and the
 
 ## Engine BPMN
 
-{{< img src="../img/erd_77_bpmn.svg" title="BPMN Tables" >}}
+{{< img src="../img/erd_78_bpmn.svg" title="BPMN Tables" >}}
 
 
 ## Engine DMN
 
-{{< img src="../img/erd_77_dmn.svg" title="DMN Tables" >}}
+{{< img src="../img/erd_78_dmn.svg" title="DMN Tables" >}}
 
 
 ## Engine CMMN
 
-{{< img src="../img/erd_77_cmmn.svg" title="CMMN Tables" >}}
+{{< img src="../img/erd_78_cmmn.svg" title="CMMN Tables" >}}
 
 
 ## History
 
 To allow different configurations and to keep the tables more flexible, the history tables contain no foreign key constraints.
 
-{{< img src="../img/erd_77_history.svg" title="History Tables" >}}
+{{< img src="../img/erd_78_history.svg" title="History Tables" >}}
 
 
 ## Identity
 
-{{< img src="../img/erd_77_identity.svg" title="Identity Tables" >}}
+{{< img src="../img/erd_78_identity.svg" title="Identity Tables" >}}
 
 
 
@@ -126,7 +126,19 @@ The data source that is constructed based on the provided JDBC properties will h
 * `jdbcMaxWaitTime`: This is a low level setting that gives the pool a chance to print a log status and re-attempt the acquisition of a connection in the case that it takes unusually long (to avoid failing silently forever if the pool is misconfigured). Default is 20000 (20 seconds).
 * `jdbcStatementTimeout`: The amount of time in seconds the JDBC driver will wait for a response from the database. Default is null which means that there is no timeout.
 
-Example database configuration:
+
+## Jdbc Batch Processing
+
+<a name="jdbcBatchProcessing"></a>Another configuration - `jdbcBatchProcessing` - sets if batch processing mode must be used when sending SQL statements to the database. When switched off, statements are executed one by one.
+Values: `true` (default), `false`.
+
+Known issues with batch processing:
+
+* batch processing is not working for Oracle versions earlier than 12.
+* when using batch processing on MariaDB and DB2, `jdbcStatementTimeout` is being ignored.
+
+
+## Example database configuration
 
 ```xml
 <property name="jdbcUrl" value="jdbc:h2:mem:camunda;DB_CLOSE_DELAY=1000" />
@@ -334,6 +346,6 @@ The following known limitations apply when using Galera Cluster:
 1. APIs requiring Pessimistic read locks in the database do not work correctly. Affected APIs: Exclusive Message correlation (`.correlateExclusively()`). See ({{< javadocref page="?org/camunda/bpm/engine/runtime/MessageCorrelationBuilder.html#correlateExclusively()" text="Javadocs" >}}).
 Another possible negative effects:
  * duplication of deployed definitions when deploying the same resources from two threads simultaneously
- * duplication of history cleanup job when calling `HistoryService#cleanUpHistoryAsync` from two threads simultaniousely
-2. Duplicate checking during deployment does not work if resources are deployed in a cluster concurrently. Concrete impact: Concrete impact: suppose there is a Camunda process engine cluster which connects to the same Galera cluster. On deployment of a new process application the process engine nodes will check if the BPMN processes provided by the process application are already deployed, to avoid duplicate deployments. If the deployment is done simultaneously on multiple process engine nodes an exclusive read lock is acquired on the the database (technically, this means that each node performs an SQL `select for update` query.), to do the duplicate checking reliably under concurrency. This does not work on Galera Cluster and may lead to multiple versions of the same process being deployed.
+ * duplication of history cleanup job when calling `HistoryService#cleanUpHistoryAsync` from two threads simultaneously
+2. Duplicate checking during deployment does not work if resources are deployed in a cluster concurrently. Concrete impact: suppose there is a Camunda process engine cluster which connects to the same Galera cluster. On deployment of a new process application the process engine nodes will check if the BPMN processes provided by the process application are already deployed, to avoid duplicate deployments. If the deployment is done simultaneously on multiple process engine nodes an exclusive read lock is acquired on the the database (technically, this means that each node performs an SQL `select for update` query.), to do the duplicate checking reliably under concurrency. This does not work on Galera Cluster and may lead to multiple versions of the same process being deployed.
 3. The `jdbcStatementTimeout` configuration setting does not work and cannot be used.

@@ -38,6 +38,28 @@ GET `/history/decision-definition/cleanable-decision-instance-report`
     <td>Filter by decision definition keys. Must be a comma-separated list of decision definition keys.</td>
   </tr>
   <tr>
+    <td>tenantIdIn</td>
+    <td>Filter by a comma-separated list of tenant ids. A decision definition must have one of the given tenant ids.</td>
+  </tr>
+  <tr>
+    <td>withoutTenantId</td>
+    <td>Only include decision definitions which belong to no tenant. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>compact</td>
+    <td>Only include decision instances which have more than zero finished instances. Value may only be <code>true</code>, as <code>false</code> is the default behavior.</td>
+  </tr>
+  <tr>
+    <td>sortBy</td>
+    <td>Sort the results by a given criterion. Valid value is <code>finished</code>.
+    Must be used in conjunction with the <code>sortOrder</code> parameter.</td>
+  </tr>
+  <tr>
+    <td>sortOrder</td>
+    <td>Sort the results in a given order. Values may be <code>asc</code> for ascending order or <code>desc</code> for descending order.
+    Must be used in conjunction with the <code>sortBy</code> parameter.</td>
+  </tr>
+  <tr>
     <td>firstResult</td>
     <td>Pagination of results. Specifies the index of the first result to return.</td>
   </tr>
@@ -74,11 +96,6 @@ A JSON array containing finished decision instance information relevant to histo
     <td>The name of the decision definition.</td>
   </tr>
   <tr>
-    <td>decisionDefinitionName</td>
-    <td>String</td>
-    <td>The name of the decision definition.</td>
-  </tr>
-  <tr>
     <td>decisionDefinitionVersion</td>
     <td>Number</td>
     <td>The version of the decision definition.</td>
@@ -97,6 +114,11 @@ A JSON array containing finished decision instance information relevant to histo
     <td>cleanableDecisionInstanceCount</td>
     <td>Number</td>
     <td>The count of the cleanable historic decision instances, referring to history time to live.</td>
+  </tr>
+  <tr>
+    <td>tenantId</td>
+    <td>String</td>
+    <td>The tenant id of the decision definition.</td>
   </tr>
 </table>
 
@@ -137,8 +159,9 @@ GET `/history/decision-definition/cleanable-decision-instance-report`
     "decisionDefinitionName":"Invoice Receipt",
     "decisionDefinitionVersion":1,
     "historyTimeToLive":5,
-    "finishedDecisionInstanceCount":100
-    "cleanableDecisionInstanceCount":53
+    "finishedDecisionInstanceCount":100,
+    "cleanableDecisionInstanceCount":53,
+    "tenantId":"aTenantId"
   },
   {
     "decisionDefinitionId":"invoice:2:7bf79f13-ef95-11e6-b6e6-34f39ab71d4e",
@@ -146,8 +169,9 @@ GET `/history/decision-definition/cleanable-decision-instance-report`
     "decisionDefinitionName":"Invoice Receipt v2.0",
     "decisionDefinitionVersion":2,
     "historyTimeToLive":5,
-    "finishedDecisionInstanceCount":1000
-    "cleanableDecisionInstanceCount":13
+    "finishedDecisionInstanceCount":1000,
+    "cleanableDecisionInstanceCount":13,
+    "tenantId":"aTenantId"
   }
 
 ]

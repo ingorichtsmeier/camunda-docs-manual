@@ -150,7 +150,7 @@ These links point you to resources for other databases:
 
 This section explains how to perform the required setup steps for Wildfly Application Server.
 
-First, you need to download either the [Camunda Wildfly 8 distribution](http://camunda.org/release/camunda-bpm/wildfly8/) or the [Camunda Wildfly 10 distribution](http://camunda.org/release/camunda-bpm/wildfly10/).
+First, you need to download either the [Camunda Wildfly 8 distribution](http://camunda.org/release/camunda-bpm/wildfly8/), the [Camunda Wildfly 10 distribution](http://camunda.org/release/camunda-bpm/wildfly10/) or the [Camunda Wildfly 11 distribution](http://camunda.org/release/camunda-bpm/wildfly11/).
 
 ## Copy Modules
 
@@ -408,6 +408,10 @@ See one of the following ways to fix this:
  * This solution is also shown in the [Jackson Annotation Example for WildFly](https://github.com/camunda/camunda-bpm-examples/blob/master/wildfly/jackson-annotations) in the Camunda example repository.
 
 See this [Forum Post](https://forum.camunda.org/t/camunda-json-marshalling-and-jsonignore/271/19) for other approaches and information.
+
+### Problem With Deployments Using the REST API
+
+Camunda Spin is not available in scripts if a process definition is deployed via REST API. Because Wildfly / JBoss handle dependencies using its module system and camunda engine module has no module dependency on the spin module.
 
 ## Groovy Scripting
 

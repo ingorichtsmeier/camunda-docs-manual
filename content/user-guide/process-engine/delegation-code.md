@@ -95,7 +95,7 @@ setter/private field on the injection target should always be `org.camunda.bpm.e
 {{< /note >}}
 
 The following code snippet shows how to inject a constant value into a field.
-Field Injection is supported when using the `class` attribute. Note that we need
+Field Injection is supported when using the `class` or `delegateExpression` attribute. Note that we need
 to declare a `extensionElements` XML element before the actual field injection
 declarations, which is a requirement of the BPMN 2.0 XML Schema.
 
@@ -183,6 +183,10 @@ Alternatively, you can also set the expressions as an attribute instead of a chi
 
 {{< note title="Note!" class="info" >}}
   The injection happens each time the service task is called since a separate instance of the class will be created. When the fields are altered by your code, the values will be re-injected when the activity is executed next time.
+{{< /note >}}
+
+{{< note title="" class="warning" >}}
+  For the same reasons as mentioned above, field injection should not be (usually) used with Spring beans, which are singletons by default. Otherwise, you may run into incostistencies due to concurrent modification of the bean fields.
 {{< /note >}}
 
 # Delegate Variable Mapping
