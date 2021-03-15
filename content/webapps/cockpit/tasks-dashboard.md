@@ -12,10 +12,6 @@ menu:
 
 ---
 
-{{< enterprise >}}
-Please note that this feature is only included in the enterprise edition of the Camunda BPM platform, it is not available in the community edition.
-{{< /enterprise >}}
-
 You can use the open tasks dashboard to see how the open tasks are distributed by individual factors.
 Refer to the [Cockpit Plugins]({{< ref "/webapps/cockpit/extend/plugins.md" >}}) section for information about 
 adding a custom open task dashboard plugin.
@@ -34,7 +30,7 @@ This category provides you an overview which shows how all open tasks which are 
 
 ## Search Tasks
 {{< enterprise >}}
-  Please note that this feature is only included in the enterprise edition of the Camunda BPM platform, it is not 
+  Please note that this feature is only included in the enterprise edition of the Camunda Platform, it is not 
   available in the community edition.
 {{< /enterprise >}}
 

@@ -34,7 +34,7 @@ customers:
 * [Community download page][community-download-page]
 * [Enterprise download page][enterprise-download-page]
 
-It is also possible to run Camunda BPM with [Spring Boot][run-with-spring-boot] and [Docker][run-with-docker].
+It is also possible to run Camunda Platform with [Spring Boot][run-with-spring-boot] and [Docker][run-with-docker].
 
 
 ## Full Distribution
@@ -81,7 +81,7 @@ See the [Installation Guide][installation-guide-standalone] for additional detai
 
 # Download Camunda Modeler
 
-Camunda Modeler is a modeling Tool for BPMN 2.0 and DMN 1.1. Camunda Modeler can be downloaded
+Camunda Modeler is a modeling Tool for BPMN 2.0 and DMN 1.3. Camunda Modeler can be downloaded
 from the [community download page][community-download-page].
 
 

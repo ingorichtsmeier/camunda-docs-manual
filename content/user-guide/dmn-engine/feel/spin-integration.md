@@ -20,7 +20,7 @@ former data structures are transformed into the latter.
 
 The Spin integration for the FEEL Engine is implemented into the 
 [Spin Process Engine Plugin][spin plugin] since it is expected that the Process Engine should be 
-capable of using Spin, if another component of the Camunda BPM Platform (here, the FEEL Engine) 
+capable of using Spin, if another component of the Camunda Platform (here, the FEEL Engine) 
 supports its usage. 
 
 In the case of a standalone DMN Engine setup, the Spin Process Engine Plugin would need to be added 
@@ -101,7 +101,7 @@ FEEL context:
 Variables of type `SpinXmlElement` are transformed into context applying the following rules:
 
 * every XML element is a context entry
-* every XML attritute is a context entry with prefix `@` under the element's entry
+* every XML attribute is a context entry with prefix `@` under the element's entry
 * multiple XML elements with the same are grouped in the context as list 
 * the inner content of an XML element is set as context entry `$content`   
 * if the element or the attribute has a namespace then the context entry has the prefix `<NAMESPACE>$`
@@ -131,5 +131,5 @@ FEEL context:
 ```
 
  
-[type doc]: https://camunda.github.io/feel-scala/feel-data-types
+[type doc]: https://camunda.github.io/feel-scala/1.11/feel-data-types
 [spin plugin]: {{< ref "/user-guide/data-formats/configuring-spin-integration.md#camunda-engine-plugin-spin" >}}

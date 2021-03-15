@@ -13,7 +13,7 @@ menu:
 
 
 
-A Service Task is used to invoke services. In Camunda this is done by calling Java code or providing a work item for an external worker to complete asynchronously.
+A Service Task is used to invoke services. In Camunda this is done by calling Java code or providing a work item for an external worker to complete asynchronously or invoking a logic which is implemented in form of webservices.
 
 {{< bpmn-symbol type="service-task" >}}
 
@@ -57,6 +57,7 @@ For more information about expression language as delegation code, please see th
 [section]({{< ref "/user-guide/process-engine/expression-language.md#use-expression-language-as-delegation-code" >}})
 of the [User Guide]({{< ref "/user-guide/_index.md" >}}).
 
+It is also possible to invoke logic which is implemented in form of webservices. `camunda:connector` is an extension that allows calling REST/SOAP APIs directly from the workflow. For more information about using connectors, please see the corresponding [section]({{< ref "/user-guide/process-engine/connectors.md#use-connectors" >}}) of the [User Guide]({{< ref "/user-guide/_index.md" >}})
 
 ## Generic Java Delegates & Field Injection
 
@@ -113,6 +114,7 @@ To declare a Service Task to be handled externally, the attribute `camunda:type`
   <tr>
     <th>Extension Elements</th>
     <td>
+      <a href="{{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#erroreventdefinition" >}}">camunda:errorEventDefinition</a>,
       <a href="{{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#failedjobretrytimecycle" >}}">camunda:failedJobRetryTimeCycle</a>,
       <a href="{{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#field" >}}">camunda:field</a>,
       <a href="{{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#connector" >}}">camunda:connector</a>,
@@ -150,6 +152,12 @@ To declare a Service Task to be handled externally, the attribute `camunda:type`
     <td></td>
     <td>
       The attribute <code>camunda:taskPriority</code> can only be used when the <code>camunda:type</code> attribute is set to <code>external</code>.
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      The element <code>camunda:errorEventDefinition</code> can only be used as a child of <code>serviceTask</code> when the <code>camunda:type</code> attribute is set to <code>external</code>.
     </td>
   </tr>
 </table>

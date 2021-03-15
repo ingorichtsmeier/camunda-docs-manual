@@ -68,7 +68,7 @@ It can also be set using Spring XML or a deployment descriptor (bpm-platform.xml
 Note that when using the default history backend, the history level is stored in the database and cannot be changed later.
 
 {{< note title="History levels and Cockpit" class="info" >}}
-[The Camunda BPM Cockpit]({{< ref "/webapps/cockpit/_index.md" >}}) web application works best with History Level set to `FULL`. "Lower" History Levels will disable certain history-related features.
+[The Camunda Platform Cockpit]({{< ref "/webapps/cockpit/_index.md" >}}) web application works best with History Level set to `FULL`. "Lower" History Levels will disable certain history-related features.
 {{< /note >}}
 
 # The Default History Implementation
@@ -340,7 +340,7 @@ To narrow down the report query, one can use the following methods from ``Histor
 * ``processDefinitionIdIn``: Only takes historic process instances into account for given process definition ids.
 * ``processDefinitionKeyIn``: Only takes historic process instances into account for given process definition keys.
 
-where `startedBefore` and `startedAfter` use `java.util.Date` (depricated) or `java.util.Calendar` objects for the input.
+where `startedBefore` and `startedAfter` use `java.util.Date` (deprecated) or `java.util.Calendar` objects for the input.
 
 For instance, one could query for all historic process instances which were started before now and get their duration:
 
@@ -744,6 +744,18 @@ The following describes the operations logged in the user operation log and the 
           <strong>hierarchical</strong>: <code>true</code> if the removal time was set across the hiearchy,
           <code>false</code> if the hierarchy was neglected
         </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>SetVariables</td>
+	  <td>Operator</td>
+    <td>
+      <ul>
+        <li><strong>async</strong>: <code>true</code> if operation was performed asynchronously as a batch</li>
+        <li><strong>nrOfInstances</strong>: The amount of affected instances</li>
+        <li><strong>nrOfVariables</strong>: The amount of set variables</li>
       </ul>
     </td>
   </tr>
@@ -1185,6 +1197,16 @@ The following describes the operations logged in the user operation log and the 
     </td>
   </tr>
   <tr>
+    <td>TaskMetrics</td>
+    <td>Delete</td>
+    <td>Operator</td>
+    <td>
+      <ul>
+        <li><strong>timestamp</strong>: The date for which all task metrics older than that have been deleted. Only present if specified by the user.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
     <td>OperationLog</td>
     <td>SetAnnotation</td>
 	  <td>Operator</td>
@@ -1481,6 +1503,10 @@ Exchanging the History Event Handler with a custom implementation allows users t
 {{< note title="Composite History Handling" class="info" >}}
   Note that if you provide a custom implementation of the HistoryEventHandler and wire it to the process engine, you override the default DbHistoryEventHandler. The consequence is that the process engine will stop writing to the history database and you will not be able to use the history service for querying the audit log. If you do not want to replace the default behavior but only provide an additional event handler, you can use the class `org.camunda.bpm.engine.impl.history.handler.CompositeHistoryEventHandler` that dispatches events to a collection of handlers.
 {{< /note >}}
+{{< note title="Spring Boot" class="info" >}}
+
+Note that providing your custom `HistoryEventHandler` in a Spring Boot Starter environment works slightly differently. By default, the Camunda Spring Boot starter uses a `CompositeHistoryEventHandler` which wraps a list of HistoryEventHandler implementations that you can provide via the `customHistoryEventHandlers` engine configuration property. If you want to override the default `DbHistoryEventHandler`, you have to explicitly set the `enableDefaultDbHistoryEventHandler` engine configuration property to `false`.
+{{< /note >}}
 
 
 # Implement a Custom History Level
@@ -1664,6 +1690,7 @@ Limitations:
 * End time is only stored in the instances tables (`ACT_HI_PROCINST`, `ACT_HI_CASEINST`, `ACT_HI_DECINST` and `ACT_HI_BATCH`). To delete data from all history tables, the cleanable instances are first fetched via a `SELECT` statement. Based on that, `DELETE` statements are made for each history table. These statements can involve joins. This is less efficient than removal-time-based history cleanup.
 * Instance hierarchies are not cleaned up atomically. Since the individual instances have different end times, they are going to be cleaned up at different times. In consequence, hierarchies can appear partially removed.
 * [Historic Instance Permissions] are not cleaned up.
+* [History Cleanup Jobs]({{< ref "/user-guide/process-engine/history.md#historycleanupjobs-in-the-historic-job-log">}}) are not removed from the historic job log.
 
 ## Cleanup Internals
 
@@ -1750,6 +1777,7 @@ The `batchOperationsForHistoryCleanup` property can be configured in Spring base
     <entry key="process-set-removal-time" value="P0D" />
     <entry key="decision-set-removal-time" value="P0D" />
     <entry key="batch-set-removal-time" value="P0D" />
+    <entry key="set-variables" value="P1D" />
     <!-- in case of custom batch jobs -->
     <entry key="custom-operation" value="P3D" />
   </map>
@@ -1757,6 +1785,36 @@ The `batchOperationsForHistoryCleanup` property can be configured in Spring base
 ```
 
 If the specific TTL is not set for a batch operation type, then the option `batchOperationHistoryTimeToLive` applies.
+
+#### Job Logs
+
+A history cleanup is always performed by executing a history cleanup job. As with all other jobs, the history cleanup job 
+will produce events that are logged in the historic job log. By default, those entries will stay in the log indefinitely 
+and cleanup must be configured explicitly. Please note that this only works for the [removal-time based history cleanup strategy]({{< ref "/user-guide/process-engine/history.md#removal-time-strategy">}}).
+
+The `historyCleanupJobLogTimeToLive` property can be used to define a TTL for historic job log entries produced by 
+history cleanup jobs. The property accepts values in the ISO-8601 date format. Note that only the notation to define a number of days is allowed.
+
+```xml
+<property name="historyCleanupJobLogTimeToLive">P5D</property>
+```
+
+#### Task Metrics
+
+The process engine reports [runtime metrics]({{< ref "/user-guide/process-engine/metrics.md">}}) to the database that can help draw conclusions about usage, load, and performance of the BPM platform.
+With every assignment of a user task, the related task worker is stored as a pseudonymized, fixed-length value in the `ACT_RU_TASK_METER_LOG` table together with a timestamp. Cleanup for this data needs to
+be configured explicitly if needed.
+
+The `taskMetricsTimeToLive` property can be used to define a TTL for task metrics entries produced by user task assignments. 
+The property accepts values in the ISO-8601 date format. Note that only the notation to define a number of days is allowed.
+
+```xml
+<property name="taskMetricsTimeToLive">P540D</property>
+```
+
+{{< note title="Heads Up!" class="warning" >}}
+If you are an enterprise customer, your license agreement might require you to report some metrics annually. Please store task metrics from `ACT_RU_TASK_METER_LOG` for at least 18 months until they were reported.
+{{< /note >}}
 
 ### Cleanup Window
 

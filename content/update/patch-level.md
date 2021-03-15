@@ -8,11 +8,11 @@ menu:
     name: "Patch Level Update"
     identifier: "migration-guide-patch"
     parent: "migration-guide"
-    pre: "Guides you through a patch level update (Example: `7.3.2` to `7.3.3`)."
+    pre: "Guides you through a patch level update (Example: `7.14.2` to `7.14.3`)."
 
 ---
 
-This guide explains how to perform a patch level update. The *patch level* is the version number "after the second dot". Example: update from `7.3.2` to `7.3.3`.
+This guide explains how to perform a patch level update. The *patch level* is the version number "after the second dot". Example: update from `7.14.2` to `7.14.3`.
 
 {{< enterprise >}}
 Please note that Patch Level Updates are only provided to enterprise customers, they are not available in the community edition.
@@ -22,8 +22,8 @@ Please note that Patch Level Updates are only provided to enterprise customers, 
 In this guide, a number of variables are used to denote common path names and constants:
 
 * `$DATABASE`: the target database platform, e.g. DB2, MySQL, etc.
-* `$DISTRIBUTION_PATH`: the path of the downloaded pre-packaged Camunda BPM distribution, e.g. `camunda-bpm-tomcat-$PLATFORM_VERSION.zip` or `camunda-bpm-tomcat-$PLATFORM_VERSION.tar.gz` for Tomcat etc.
-* `$PLATFORM_VERSION`: the version of the Camunda BPM platform you want to install, e.g. `7.1.0`.
+* `$DISTRIBUTION_PATH`: the path of the downloaded pre-packaged Camunda Platform distribution, e.g. `camunda-bpm-tomcat-$PLATFORM_VERSION.zip` or `camunda-bpm-tomcat-$PLATFORM_VERSION.tar.gz` for Tomcat etc.
+* `$PLATFORM_VERSION`: the version of the Camunda Platform you want to install, e.g. `7.1.0`.
 
 {{< /note >}}
 
@@ -383,6 +383,15 @@ The following list is an overview of all currently available patch scripts:
       </td>
     </tr>
     <tr>
+      <td>7.11</td>
+      <td>engine_7.11_patch_7.11.18_to_7.11.19.sql</td>
+      <td>Introducing new engine lock properties</td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-12590">CAM-12590</a>
+      </td>
+    </tr>
+    <tr>
       <td>7.12</td>
       <td>engine_7.12_patch_7.12.0_to_7.12.1.sql</td>
       <td>Add index to improve Historic Activity Instance query performance.
@@ -392,6 +401,66 @@ The following list is an overview of all currently available patch scripts:
       <td>
         <a href="https://app.camunda.com/jira/browse/CAM-11117">CAM-11117</a>
       </td>
+    </tr>
+    <tr>
+      <td>7.12</td>
+      <td>engine_7.12_patch_7.12.10_to_7.12.11.sql</td>
+      <td>Add support for Optimize 3.2.
+      </td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-12383">CAM-12383</a>
+      </td>
+    </tr>
+    <tr>
+      <td>7.12</td>
+      <td>engine_7.12_patch_7.12.11_to_7.12.12.sql</td>
+      <td>Introducing new engine lock properties
+      <strong>This is the same patch as engine_7.11_patch_7.11.18_to_7.11.19.sql.</strong>
+      </td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-12590">CAM-12590</a>
+      </td>
+    </tr>
+    <tr>
+      <td>7.13</td>
+      <td>engine_7.13_patch_7.13.4_to_7.13.5_1.sql</td>
+      <td>Add index to improve Task query performance.
+      </td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-4441">CAM-4441</a>
+      </td>
+    </tr>
+    <tr>
+      <td>7.13</td>
+      <td>engine_7.13_patch_7.13.4_to_7.13.5_2.sql</td>
+      <td>Add support for Optimize 3.2.
+      <strong>This is the same patch as engine_7.12_patch_7.12.10_to_7.12.11.sql.</strong>
+      </td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-12383">CAM-12383</a>
+      </td>
+    </tr>
+    <tr>
+      <td>7.13</td>
+      <td>engine_7.13_patch_7.13.5_to_7.13.6.sql</td>
+      <td>Introducing new engine lock properties
+      <strong>This is the same patch as engine_7.12_patch_7.12.11_to_7.12.12.sql.</strong>
+      </td>
+      <td>All databases</td>
+      <td>
+        <a href="https://jira.camunda.com/browse/CAM-12590">CAM-12590</a>
+      </td>
+    </tr>
+    <tr>
+      <td>7.14</td>
+      <td>engine_7.14_patch_7.14.2_to_7.14.3.sql</td>
+      <td>Re-define ACT_IDX_JOB_HANDLER index to make it work with <a href="https://docs.oracle.com/en/database/oracle/oracle-database/18/spuss/enabling-the-new-extended-data-type-capability.html">extended data types</a> on Oracle.</td>
+      <td>Oracle</td>
+      <td><a href="https://jira.camunda.com/browse/CAM-12832">CAM-12832</a></td>
     </tr>
   </tbody>
 </table>
@@ -407,7 +476,7 @@ By default it is not possible anymore to pass arbitrary expressions as parameter
 
 Reason: Passing EL expressions in a task query enables execution of arbitrary code when the query is evaluated.
 
-The process engine no longer evaluates these expressions by default and throws an exception instead. The pevious behavior can be re-enabled by setting the process configuration `enableExpressionsInAdhocQueries` to true.
+The process engine no longer evaluates these expressions by default and throws an exception instead. The previous behavior can be re-enabled by setting the process configuration `enableExpressionsInAdhocQueries` to true.
 
 See the user guide on [security considerations for custom code]({{< ref "/user-guide/process-engine/securing-custom-code.md" >}}) for details.
 
@@ -494,7 +563,118 @@ With this release, cockpit adds support for DMN 1.3, the next version of the DMN
 
 The Camunda engine already supports the DMN 1.3 namespace by default, so there are no more steps required to migrate.
 Make sure you have the latest version of [Camunda Modeler](https://camunda.com/download/modeler/) installed to edit DMN 1.3 files locally.
-   
+
+## 7.12.5 to 7.12.6
+
+### Oracle JDBC Driver Removed from Camunda Docker Images
+
+The Docker images for Camunda 7.13 no longer provide an Oracle JDBC driver out of the box. If you relied on this, apply the strategy outlined in https://github.com/camunda/docker-camunda-bpm-platform#database-environment-variables: Add the driver to the container and configure the database settings manually by linking the configuration file into the container.
+
+## 7.13.6 to 7.13.7 / 7.12.11 to 7.12.12 / 7.11.18 to 7.11.19
+
+### [Legal Note] Telemetry 
+
+In the mentioned patches above, a telemetry functionality is introduced. For more information please visit the [telemetry][] page.
+Before you upgrade to a Camunda Platform Runtime version >= 7.14.0-alpha1, 7.13.7+, 7.12.12+, and 7.11.19+, or activate the telemetry functionality, please make sure that you are authorized to take this step, and that the installation or activation of the [telemetry functionality][engine-config-initializeTelemetry] is not in conflict with any company-internal policies, compliance guidelines, any contractual or other provisions or obligations of your company.
+
+Camunda cannot be held responsible in the event of unauthorized installation or activation of this function.
+
+[engine-config-initializeTelemetry]: {{< ref "/reference/deployment-descriptors/tags/process-engine.md#initializeTelemetry" >}}
+[telemetry]: {{< ref "/introduction/telemetry.md" >}}
+
+### Custom REST API
+
+In case you are deploying a custom REST API that builds upon the one provided by Camunda, please make sure to add the following listener to the `web.xml`:
+
+```xml
+<web-app ...>
+  ...
+  <listener>
+    <listener-class>org.camunda.bpm.engine.rest.impl.web.bootstrap.RestContainerBootstrap</listener-class>
+  </listener>
+  ...
+</web-app>
+```
+
+This servlet context listener is used for bootstrapping the REST API and should therefore be included in your custom application setup.
+
+## 7.14.0 to 7.14.1 / 7.13.6 to 7.13.7
+
+### FEEL Engine: Changed Module Structure
+
+With the above-mentioned patch releases, the module structure has changed in conjunction with the [FEEL Engine]. 
+From now on, the FEEL Engine will be delivered as a dedicated module `feel-engine`. It is no longer part of 
+the `camunda-engine-feel-scala` module. The FEEL Engine module follows its own versioning.
+
+The following modules are dependent on the newly introduced `feel-engine` module:
+
+* `camunda-engine-plugin-spin`
+* `camunda-engine-feel-scala`
+
+[FEEL Engine]: {{<ref "/user-guide/dmn-engine/feel/_index.md" >}}
+
+## 7.14.3 to 7.14.4 / 7.13.9 to 7.13.10 / 7.12.15 to 7.12.16
+
+### Update of MySQL JDBC Driver in Camunda Docker Images
+
+With this release, the docker images contain a new version of the MySQL JDBC Driver.
+
+Old Version: 5.1.21\
+New Version: 8.0.23
+
+#### Behavior Changes
+
+The driver's new version has two significant behavioral changes you should take care of when migrating 
+your Docker-based Camunda Runtime installation.
+
+##### Downgrade to 5.1.21
+
+You don't want to migrate to the new version? You can replace the new MySQL JDBC Driver with the old one
+to restore the previous behavior. To do so, you can create a new `Dockerfile` based on one of our official 
+docker images and add your custom commands to replace the MySQL JDBC Driver.
+
+For the Wildfly image, additionally make sure to adjust the data source class in the `standalone.xml` 
+file located under `/camunda/standalone/configuration/` from `com.mysql.cj.jdbc.MysqlXADataSource` back to 
+`com.mysql.jdbc.jdbc2.optional.MysqlXADataSource`:
+
+```xml
+<!-- ... -->
+<driver name="mysql" module="mysql.mysql-connector-java">
+    <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+</driver>
+<!-- ... -->
+```
+
+##### 1) Milliseconds Precision for Date/Time values
+
+The new version of the Driver changes how a date/time value is handled. Please make sure to configure 
+the Driver as described in [MySQL Database Configuration]({{< ref "/user-guide/process-engine/database/mysql-configuration.md" >}})
+to avoid breaking behavior.
+
+##### 2) Changed Time Zone Handling
+
+In case the process engine and the MySQL Server operate in different time zones, and you use the 
+MySQL JDBC Driver's default configuration, migrating to the new release leads to a wrong conversion of 
+date values (e.g., the due date of a task can change).
+
+You can configure the driver to convert date values from and to the MySQL Server into the time zone 
+in which the process engine/JVM operates. This ensures that values that were stored before the migration 
+are returned correctly after the migration and date values are stored correctly after the migration. 
+You can achieve this by specifying the correct time zone via the property [`serverTimeZone`](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-connp-props-datetime-types-processing.html#cj-conn-prop_serverTimezone) in your JDBC connection URL.\
+For instance, if your process engine operates in CET but your MySQL Server does not, set the property to `serverTimeZone=CET`.
+
+{{< note title="Heads-up!" class="info" >}}
+Changing the time zone of the MySQL Server to the one the process engine operates in can have unwanted side-effects 
+to date values that are stored in columns of type `TIMESTAMP`: MySQL converts `TIMESTAMP` values from the server time zone 
+to UTC for storage, and back from UTC to the current time zone for retrieval. Read more about it in the 
+[MySQL Docs](https://dev.mysql.com/doc/refman/5.6/en/datetime.html).
+{{< /note >}}
+
+#### Further Reading
+
+* [Change Docker Environment Variables](https://github.com/camunda/docker-camunda-bpm-platform/tree/7.15#database-environment-variables)
+* [MySQL Connector/J 8.0 Migration Guide](https://dev.mysql.com/doc/connectors/en/connector-j-upgrading-to-8.0.html)
+
 # Full Distribution
 
 This section is applicable if you installed the [Full Distribution]({{< ref "/introduction/downloading-camunda.md#full-distribution" >}}) with a **shared process engine**. In this case you need to update the libraries and applications installed inside the application server.
@@ -502,7 +682,7 @@ This section is applicable if you installed the [Full Distribution]({{< ref "/in
 Please note that the following procedure may differ for cluster scenarios. Contact our [support team](https://app.camunda.com/jira/browse/SUPPORT) if you need further assistance.
 
 * Shut down the server
-* Exchange Camunda BPM libraries, tools and webapps (EAR, RAR, Subsystem (JBoss), Shared Libs) - essentially, follow the [installation guide]({{< ref "/installation/full/_index.md" >}}) for your server.
+* Exchange Camunda Platform libraries, tools and webapps (EAR, RAR, Subsystem (JBoss), Shared Libs) - essentially, follow the [installation guide]({{< ref "/installation/full/_index.md" >}}) for your server.
 * Restart the server
 
 # Application With Embedded Process Engine

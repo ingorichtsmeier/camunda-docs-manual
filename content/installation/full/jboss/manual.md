@@ -13,19 +13,27 @@ menu:
 ---
 
 
-This document describes the installation of Camunda BPM and its components on a vanilla [JBoss EAP 6](http://www.jboss.org/products/eap) or vanilla [Wildfly Application Server / JBoss EAP 7](http://www.wildfly.org).
+This document describes the installation of Camunda Platform and its components on a vanilla [JBoss EAP 6](https://developers.redhat.com/products/eap/download) or vanilla [Wildfly Application Server / JBoss EAP 7](http://www.wildfly.org).
 
 {{< note title="Reading this Guide" class="info" >}}
 This guide uses a number of variables to denote common path names and constants:
 `$JBOSS_HOME`/`$WILDFLY_HOME` points to the JBoss/Wildfly application server main directory.
-`$PLATFORM_VERSION` denotes the version of the Camunda BPM platform you want to install or already have installed, e.g. `7.0.0`.
+`$PLATFORM_VERSION` denotes the version of the Camunda Platform you want to install or already have installed, e.g. `7.0.0`.
 {{< /note >}}
 
 # Required Setup for JBoss EAP 6
 
+{{< enterprise >}}
+The Camunda JBoss distribution for JBoss EAP 6 is only available in the Enterprise Edition.
+{{< /enterprise >}}
+
 This section explains how to perform the required setup steps for JBoss Application Server.
 
-First, you need to download the [Camunda JBoss distribution](https://downloads.camunda.cloud/release/camunda-bpm/jboss/).
+First, you need to download the [Camunda JBoss distribution](https://downloads.camunda.cloud/enterprise-release/camunda-bpm/jboss/) (Enterprise version only).
+
+## Copy Modules
+
+Copy the modules from the `modules/` folder of the Camunda distribution, to the `$JBOSS_HOME/modules/` of your JBoss EAP application server.
 
 
 ## Adjust the Configuration
@@ -95,7 +103,7 @@ This also configures the default process engine.
 
 In the default configuration of the distribution, the database schema and all required tables are automatically created in an H2 database when the engine starts up for the first time. If you do not want to use the H2 database, you have to
 
-* Create a database schema for the Camunda BPM platform yourself.
+* Create a database schema for the Camunda Platform yourself.
 * Execute the SQL DDL scripts which create all required tables and default indices.
 
 The SQL DDL scripts reside in the `sql/create` folder of the distribution:
@@ -112,7 +120,7 @@ When you create the tables manually, then you have to configure the engine to **
 {{< note title="Heads Up!" class="info" >}}
 If you have defined a specific prefix for the entities of your database, then you will have to manually adjust the `create` scripts accordingly so that the tables are created with the prefix.
 
-Please note further that READ COMMITED is the required isolation level for database systems to run Camunda with. You may have to change the default setting on your database when installing Camunda. For more information see the documentation on [isolation levels]({{< ref "/user-guide/process-engine/database.md#isolation-level-configuration" >}}).
+Please note further that READ COMMITED is the required isolation level for database systems to run Camunda with. You may have to change the default setting on your database when installing Camunda. For more information see the documentation on [isolation levels]({{< ref "/user-guide/process-engine/database/database-configuration.md#isolation-level-configuration" >}}).
 {{< /note >}}
 
 ## Create a Datasource
@@ -139,7 +147,7 @@ If you start the script from a different location the database is stored there!
 Using H2 as a database is ideal for development purposes but is not recommended for usage in a productive environment.
 These links point you to resources for other databases:
 
-* [How to configure an Oracle database](http://blog.foos-bar.com/2011/08/jboss-as-7-and-oracle-datasource.html)
+* [How to configure an Oracle database](http://www.ironjacamar.org/doc/userguide/1.0/en-US/html_single/#ex_datasources_oracle)
 * [How to configure a MySQL database](http://www.ironjacamar.org/doc/userguide/1.0/en-US/html_single/#ex_datasources_mysql)
 
 
@@ -179,9 +187,9 @@ Add the Camunda subsystem as extension:
     <extension module="org.camunda.bpm.wildfly.camunda-wildfly-subsystem"/>
 ```
 
-Configure the thread pool for the Camunda BPM platform Job Executor:
+Configure the thread pool for the Camunda Platform Job Executor:
 
-Since Camunda BPM 7.5, the configuration of the thread pool is done in the Camunda subsystem, not in the JBoss Threads subsystem anymore like it was done before 7.5.
+Since Camunda Platform 7.5, the configuration of the thread pool is done in the Camunda subsystem, not in the JBoss Threads subsystem anymore like it was done before 7.5.
 The thread pool creation and shutdown is now controlled through the Camunda subsystem.
 You are able to configure it through the following new configuration elements in the `job-executor` element of the subsystem XML configuration.
 
@@ -234,7 +242,7 @@ The below example also configures the default process engine.
 
 ## Create the Database Schema
 
-By default, the database schema is automatically created in an H2 database when the engine starts up for the first time. If you do not want to use the H2 database, you first have to create a database schema for the Camunda BPM platform. The Camunda BPM distribution ships with a set of SQL create scripts that can be executed by a database administrator.
+By default, the database schema is automatically created in an H2 database when the engine starts up for the first time. If you do not want to use the H2 database, you first have to create a database schema for the Camunda Platform. The Camunda Platform distribution ships with a set of SQL create scripts that can be executed by a database administrator.
 
 The database creation scripts are reside in the `sql/create` folder:
 
@@ -277,7 +285,7 @@ These links point you to resources for other databases:
 
 # Optional Components
 
-This section describes how to install optional dependencies. None of these are required to work with the core platform. Before continuing, make sure that the Camunda BPM platform is already installed according to [this step]({{< relref "#required-setup-for-jboss-eap-6" >}}) for JBoss EAP 6, respectively [this step]({{< relref "#required-setup-for-wildfly-jboss-eap-7" >}}) for WildFly / JBoss EAP 7.
+This section describes how to install optional dependencies. None of these are required to work with the core platform. Before continuing, make sure that the Camunda Platform is already installed according to [this step]({{< relref "#required-setup-for-jboss-eap-6" >}}) for JBoss EAP 6, respectively [this step]({{< relref "#required-setup-for-wildfly-jboss-eap-7" >}}) for WildFly / JBoss EAP 7.
 
 
 ## Cockpit, Tasklist and Admin
@@ -310,19 +318,12 @@ The following steps are required to deploy the REST API:
    provided that you deployed the application in the context `/engine-rest`.
 
 
-## Camunda Connect
+## Camunda Connect Plugin
 
 Add the following modules (if not existing) from the folder `$JBOSS_DISTRIBUTION/modules/` to the folder `$JBOSS_HOME/modules/`:
 
-* `org/camunda/connect/camunda-connect-core`
-* `org/camunda/connect/camunda-connect-http-client`
-* `org/camunda/connect/camunda-connect-soap-http-client`
 * `org/camunda/bpm/camunda-engine-plugin-connect`
 * `org/camunda/commons/camunda-commons-utils`
-* `org/apache/httpcomponents/httpclient`
-* `org/apache/httpcomponents/httpcore`
-* `commons-codec/commons-codec`
-* `commons-logging/commons-logging`
 
 To activate Camunda Connect functionality for a process engine, a process engine plugin has to be registered in `$JBOSS_HOME/standalone/configuration/standalone.xml` as follows:
 

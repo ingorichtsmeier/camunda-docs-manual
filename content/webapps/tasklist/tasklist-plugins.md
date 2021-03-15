@@ -11,7 +11,7 @@ menu:
 ---
 
 {{< note title="Plugin Compatibility" class="info" >}}
-  Please note that the code of Tasklist plugins might need to be migrated when updating Camunda BPM to a higher version (e.g. CSS styles).
+  Please note that the code of Tasklist plugins might need to be migrated when updating Camunda Platform to a higher version (e.g. CSS styles).
 {{< /note >}}
 
 Tasklist uses the concept of plugins to add own functionality without having to extend or hack the Tasklist web application.
@@ -22,7 +22,6 @@ For further details about the concepts behind plugins, please read the [Cockpit 
   * To publish the plugin with Tasklist, its class name must be put into a file called ```org.camunda.bpm.tasklist.plugin.spi.TasklistPlugin``` that resides in the directory ```META-INF/services```.
   * The plugin mechanism of Tasklist does not allow to provide additional SQL queries by using [MyBatis](http://www.mybatis.org/) mappings.
 {{< /note >}}
-
 
 # Plugin Points
 
@@ -51,6 +50,18 @@ Here you can see the various points at which you are able to add your own plugin
 
 {{< img src="../img/plugin-points/tasklist-plugin-task-detail.png" title="Plugin Point" >}}
 
+This plugin points properties contain the attribute `label`, which will be rendered in the navigation even when the plugin is not selected.
+
+```Javascript
+properties: {
+  label: "My Plugin"
+}
+```
+
+This additional data is passed into the render function:
+
+  * `taskId`
+
 ---
 
 **Name:** `tasklist.list`.
@@ -62,6 +73,10 @@ Here you can see the various points at which you are able to add your own plugin
 **Name:** `tasklist.card`.
 
 {{< img src="../img/plugin-points/tasklist-plugin-card.png" title="Plugin Point" >}}
+
+This additional data is passed into the render function:
+
+  * `taskId`
 
 ---
 
@@ -79,5 +94,5 @@ var ViewConfig = [ 'ViewsProvider', function(ViewsProvider) {
 
 For more information on creating and configuring your own plugin, please have a look at the following examples:
 
-* [How to build the server side](https://github.com/camunda/camunda-bpm-webapp/tree/master/src/main/java/org/camunda/bpm/tasklist/impl/plugin)
-* [How to build the client side](https://github.com/camunda/camunda-bpm-webapp/tree/master/ui/tasklist/plugins/standaloneTask/app)
+* [How to build the server side](https://github.com/camunda/camunda-bpm-platform/tree/master/webapps/src/main/java/org/camunda/bpm/tasklist/impl/plugin)
+* [How to build the client side](https://github.com/camunda/camunda-bpm-platform/tree/master/webapps/ui/tasklist/plugins/standaloneTask/app)

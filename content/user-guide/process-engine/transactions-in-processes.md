@@ -230,13 +230,20 @@ transaction management. More information can be found in the following chapters:
 The use cases for transaction manager integration are situations where the process engine needs to
 integrate with
 
-* transaction focused programming models such as Java EE or Spring (think about transaction scoped
+* Transaction focused programming models such as Java EE or Spring (think about transaction scoped
   JPA entity managers in Java EE),
-* other transactional resources such as secondary datasources, messaging systems or other
+* Other transactional resources such as secondary datasources, messaging systems or other
   transactional middleware like the web services stack.
+  
+{{< note title="" class="warning" >}}
+  When you configure a transaction manager, make sure that it actually manages the data source that
+  you have configured for the process engine. If that is not the case, the data source works in auto-commit mode. 
+  This can lead to inconsistencies in the database, because transaction commits and rollbacks are no longer performed.
+{{< /note >}}
 
-[tx-spring]: {{< ref "/user-guide/spring-framework-integration/_index.md#spring-transaction-integration" >}}
-[tx-jta]: {{< ref "/user-guide/cdi-java-ee-integration/_index.md" >}}
+
+[tx-spring]: {{< ref "/user-guide/spring-framework-integration/transactions.md" >}}
+[tx-jta]: {{< ref "/user-guide/cdi-java-ee-integration/jta-transaction-integration.md" >}}
 
 ## Transactions and the Process Engine Context
 
@@ -264,7 +271,7 @@ Process Engine Context of the outer Command.
 The `ProcessEngineContext` utility class can be used to declare to
 the Process Engine that a new Process Engine Context needs to be created
 in order for the database operations in a nested Process Engine Command
-to be separated in a new transaction. The folowing `Java` code example 
+to be separated in a new transaction. The following `Java` code example 
 shows how the class can be used:
 
 ```java
@@ -355,7 +362,7 @@ However, since pessimistic locks are exclusive, concurrency is reduced, degradin
 
 ## Optimistic Locking in Camunda
 
-Camunda uses Optimistic Locking for concurrency control. If a concurency conflict is detected, 
+Camunda uses Optimistic Locking for concurrency control. If a concurrency conflict is detected, 
 an exception is thrown and the transaction is rolled back. Conflicts are detected when _UPDATE_ or _DELETE_ statements are executed. 
 The execution of delete or update statements return an affected rows count. 
 If this count is equal to zero, it indicates that the row was previously updated or deleted.

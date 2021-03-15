@@ -12,7 +12,7 @@ menu:
 ---
 
 {{< enterprise >}}
-Please note that this feature is only included in the enterprise edition of the Camunda BPM platform, it is not available in the community edition.
+Please note that this feature is only included in the enterprise edition of the Camunda Platform, it is not available in the community edition.
 {{< /enterprise >}}
 
 {{< img src="../../img/batch/batch_operation_definition.png" alt="Batch Operation Definition" caption="" >}}
@@ -25,6 +25,7 @@ It is possible to execute the following batch operations:
 - Delete finished process instances.
 - Set retries of Jobs belonging to process instances.
 - Set retries of external tasks belonging to process instances.
+- Set variables to process instances.
 - Suspend running process instances.
 - Activate suspended process instances.
 - Delete decision instances.

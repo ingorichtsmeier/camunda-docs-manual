@@ -12,7 +12,7 @@ menu:
 
 ---
 
-Camunda BPM provides a wrapper for the FEEL Scala Engine to implement Custom Functions, which can be 
+Camunda Platform provides a wrapper for the FEEL Scala Engine to implement Custom Functions, which can be 
 called in expressions and unary tests. 
 
 {{< note title="Custom Function Behavior" class="warning" >}}
@@ -119,7 +119,7 @@ All Java types listed in the "Return Types" section of the [FEEL Type Handling] 
 the types listed in the [FEEL Data Types] documentation can be returned by a Custom Function.
 
 [FEEL Type Handling]: {{< ref "/user-guide/dmn-engine/feel/type-handling.md#return-types" >}}
-[FEEL Data Types]: https://camunda.github.io/feel-scala/feel-data-types
+[FEEL Data Types]: https://camunda.github.io/feel-scala/1.11/feel-data-types
 [Process Engine Plugin]: {{< ref "/user-guide/process-engine/process-engine-plugins.md" >}}
 [dmnFeelCustomFunctionProviders]: {{< ref "/reference/deployment-descriptors/tags/process-engine.md#dmnFeelCustomFunctionProviders" >}}
 [Register Custom Function Providers]: #register-custom-function-providers

@@ -10,7 +10,7 @@ menu:
 
 ---
 
-In Connect a `Connectors` class exists which automatically detects
+In Camunda Connect a `Connectors` class exists which automatically detects
 every connector in the classpath. It can be used to get the HTTP connector
 instance by its connector ID, which is `http-connector`.
 
@@ -58,7 +58,7 @@ public class HttpConnectorConfigurator implements ConnectorConfigurator<HttpConn
 ```
 
 To enable auto detection of your new configurator please add a file called
-`org.camunda.bpm.connect.spi.ConnectorConfigurator` to your
+`org.camunda.connect.spi.ConnectorConfigurator` to your
 `resources/META-INF/services` directory with class name as content. For more
 information see the [extending Connect]({{< ref "/reference/connect/extending-connect.md" >}}) section.
 

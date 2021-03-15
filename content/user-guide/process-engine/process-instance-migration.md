@@ -48,6 +48,9 @@ Process `exampleProcess:2`:
 
 <div data-bpmn-diagram="../bpmn/process-instance-migration/example2"></div>
 
+{{< enterprise >}}
+  The Camunda enterprise edition provides a user interface to migrate process instances in [Camunda Cockpit]({{< ref "/webapps/cockpit/bpmn/process-instance-migration.md" >}})
+{{< /enterprise >}}
 
 # Process Instance Migration by Example
 
@@ -484,7 +487,7 @@ When mapping events, there are two configuration options:
 {{< /note >}}
 
 {{< note title="Conditional Events" class="info" >}}
-The usage of `#updateEventTrigger` is mandatory for migrating conditional events. The condition is overriden by the condition of the new conditional event.
+The usage of `#updateEventTrigger` is mandatory for migrating conditional events. The condition is overridden by the condition of the new conditional event.
 {{< /note >}}
 
 

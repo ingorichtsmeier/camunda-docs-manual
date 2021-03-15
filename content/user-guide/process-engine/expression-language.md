@@ -10,12 +10,12 @@ menu:
 
 ---
 
-Camunda BPM supports Unified Expression Language (EL), specified as part of the JSP 2.1 standard
+Camunda Platform supports Unified Expression Language (EL), specified as part of the JSP 2.1 standard
 ([JSR-245][]). To do so, it uses the open source [JUEL][] implementation. To get more general
 information about the usage of Expression Language, please read the [official documentation][].
 Especially the provided [examples][examples] give a good overview of the syntax of expressions.
 
-Within Camunda BPM, EL can be used in many circumstances to evaluate small script-like
+Within Camunda Platform, EL can be used in many circumstances to evaluate small script-like
 expressions. The following table provides an overview of the BPMN elements which support
 usage of EL.
 
@@ -73,7 +73,7 @@ usage of EL.
 
 ## Delegation Code
 
-Besides Java code, Camunda BPM also supports the evaluation of expressions as delegation code. For
+Besides Java code, Camunda Platform also supports the evaluation of expressions as delegation code. For
 general information about delegation code, see the corresponding
 [section]({{< ref "/user-guide/process-engine/delegation-code.md" >}}).
 
@@ -179,6 +179,39 @@ a bean.
   </serviceTask>
 ```
 
+## External Task Error Handling
+
+For External Tasks it is possible to define
+[camunda:errorEventDefinition]({{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#erroreventdefinition" >}})
+elements which can be provided with a JUEL expression. The expression is evaluated on `ExternalTaskService#complete` and
+`ExternalTaskService#handleFailure`. If the expression evaluates to `true`, a BPMN error is thrown which can be caught by an
+[Error Boundary Event]({{< ref "/reference/bpmn20/events/error-events.md#error-boundary-event" >}}).
+
+In the scope of an External Task, expressions have access to the {{< javadocref page="?org/camunda/bpm/engine/externaltask/ExternalTask.html" text="ExternalTaskEntity" >}} object via the key `externalTask` which provides getter methods for `errorMessage`, `errorDetails`, `workerId`, `retries` and more.
+
+**Examples:**
+
+How to access the External Task object:
+
+```xml
+<bpmn:serviceTask id="myExternalTaskId" name="myExternalTask" camunda:type="external" camunda:topic="myTopic">
+  <bpmn:extensionElements>
+    <camunda:errorEventDefinition id="myErrorEventDefinition" errorRef="myError" expression="${externalTask.getWorkerId() == 'myWorkerId'}" />
+  </bpmn:extensionElements>
+</bpmn:serviceTask>
+```
+
+How to match an error message:
+
+```xml
+<bpmn:serviceTask id="myExternalTaskId" name="myExternalTask" camunda:type="external" camunda:topic="myTopic">
+  <bpmn:extensionElements>
+    <camunda:errorEventDefinition id="myErrorEventDefinition" errorRef="myError" expression="${externalTask.getErrorDetails().contains('myErrorMessage')}" />
+  </bpmn:extensionElements>
+</bpmn:serviceTask>
+```
+
+For further details on the functionality of error event definitions in the context of external tasks, consult the [External Tasks Guide]({{< ref "/user-guide/process-engine/external-tasks.md#error-event-definitions" >}}).
 
 ## Value
 
@@ -202,7 +235,6 @@ conditional sequence flow can directly check a variable value:
   </sequenceFlow>
 ```
 
-
 ## Internal Context Variables
 
 Depending on the current execution context, special built-in context variables are available while
@@ -219,7 +251,7 @@ evaluating expressions:
   <tbody>
     <tr>
       <td><code>execution</code></td>
-      <td><code>DelegateExecution</code></td>
+      <td><code>{{< javadocref page="?org/camunda/bpm/engine/delegate/DelegateExecution.html" text="DelegateExecution" >}}</code></td>
       <td>
         Available in a BPMN execution context like a service task, execution listener or sequence
         flow.
@@ -227,12 +259,17 @@ evaluating expressions:
     </tr>
     <tr>
       <td><code>task</code></td>
-      <td><code>DelegateTask</code></td>
+      <td><code>{{< javadocref page="?org/camunda/bpm/engine/delegate/DelegateTask.html" text="DelegateTask" >}}</code></td>
       <td>Available in a task context like a task listener.</td>
     </tr>
     <tr>
+      <td><code>externalTask</code></td>
+      <td><code>{{< javadocref page="?org/camunda/bpm/engine/externaltask/ExternalTask.html" text="ExternalTask" >}}</code></td>
+      <td>Available during an external task context activity (e.g. in <a href="{{< ref "/reference/bpmn20/custom-extensions/extension-elements.md#erroreventdefinition" >}}">camunda:errorEventDefinition</a> expressions).</td>
+    </tr>
+    <tr>
       <td><code>caseExecution</code></td>
-      <td><code>DelegateCaseExecution</code></td>
+      <td><code>{{< javadocref page="?org/camunda/bpm/engine/delegate/DelegateCaseExecution.html" text="DelegateCaseExecution" >}}</code></td>
       <td>Available in a CMMN execution context.</td>
     </tr>
     <tr>

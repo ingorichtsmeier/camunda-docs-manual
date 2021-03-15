@@ -20,7 +20,7 @@ Out of the box, the process engine provides two Id generator implementations.
 
 # The Database Id Generator
 
-The Database Id Generator is implemented using a sequence Generator on top of the `ACT_RU_PROPERTY`
+The Database Id Generator is implemented using a sequence Generator on top of the `ACT_GE_PROPERTY`
 table.
 
 This id generator is good for debugging and testing since it generates human readable ids.
@@ -39,7 +39,7 @@ internally.
   Always use the StrongUuidGenerator for production setups.
 {{< /note >}}
 
-In the [Camunda BPM Full Distributions][2], the
+In the [Camunda Platform Full Distributions][2], the
 StrongUuidGenerator is preconfigured and the default Id Generator used by the process engine.
 
 If you use an embedded process engine configuration and configure the process engine using Spring,
@@ -69,5 +69,5 @@ Additionally, you need the following maven dependency:
 </dependency>
 ```
 
-[1]: http://wiki.fasterxml.com/JugHome
+[1]: https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
 [2]: {{< ref "/introduction/downloading-camunda.md#full-distribution" >}}

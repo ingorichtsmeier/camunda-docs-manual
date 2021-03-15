@@ -13,7 +13,7 @@ menu:
 
 # LDAP
 
-If you connect the Camunda BPM platform with the LDAP identity service, you have read-only access to the users and groups. Create new users and groups via the LDAP system, but not in the admin application. Find more information about how to configure the process engine in order to use the LDAP identity service [here]({{< ref "/user-guide/process-engine/identity-service.md#the-ldap-identity-service" >}}).
+If you connect the Camunda Platform with the LDAP identity service, you have read-only access to the users and groups. Create new users and groups via the LDAP system, but not in the admin application. Find more information about how to configure the process engine in order to use the LDAP identity service [here]({{< ref "/user-guide/process-engine/identity-service.md#the-ldap-identity-service" >}}).
 
 
 # Logo and Header Color
@@ -36,6 +36,18 @@ and can override the standard styles.
 [cam-widget-header] {
   border-bottom-color: blue;
 }
+```
+
+**Note:** you can also change the app name (*Admin*) and vendor (*Camunda*)
+by changing the `app/admin/scripts/config.js` configuration file as follow:
+
+```js
+// …
+app: {
+  name: 'Admin',
+  vendor: 'Company'
+},
+// …
 ```
 
 # Localization

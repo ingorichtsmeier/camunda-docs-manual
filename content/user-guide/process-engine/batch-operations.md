@@ -20,6 +20,7 @@ The following operations can be executed asynchronously
 - [Process Instance Modification]({{< ref "/user-guide/process-engine/process-instance-modification.md#modification-of-multiple-process-instances" >}})
 - [Process Instance Restart]({{< ref "/user-guide/process-engine/process-instance-restart.md#asynchronous-batch-execution" >}})
 - [Setting retries of external tasks](#setting-retries-of-external-tasks)
+- [Set Variables to Process Instances](#set-variables-to-process-instances)
 - [Set a Removal Time to Historic Process Instances](#historic-process-instances)
 - [Set a Removal Time to Historic Decision Instances](#historic-decision-instances)
 - [Set a Removal Time to Historic Batches](#historic-batches)
@@ -86,6 +87,30 @@ List<String> externalTaskIds = ...;
 externalTaskService.setRetriesAsync(
         externalTaskIds, TEST_REASON);
 ```
+
+## Set Variables to Process Instances
+
+Sometimes it is necessary to add or update data of an already running process instance. 
+For example, when a user entered incorrect data at the beginning of a process, 
+the data needs to be corrected on-the-fly. 
+
+This batch operation helps you to set variables to the root scope of process instances asynchronously.
+
+You can either (1) filter for process instances using a `HistoricProcessInstanceQuery` or a `ProcessInstanceQuery`
+or (2) pass a set of process instance ids directly.
+
+Please see below how to call the Java API:
+
+```java
+List<String> processInstanceIds = ...;
+Map<String, Object> variables = Variables.putValue("my-variable", "my-value");
+runtimeService.setVariablesAsync(processInstanceIds, variables);
+```
+
+### Known Limitation
+
+Currently, it is not possible to set transient variables via batch operation. However,
+you can [set transient variables] synchronously. 
 
 ## Set a Removal Time
 
@@ -161,3 +186,4 @@ Batch batch = historyService.setRemovalTimeToHistoricBatches()
 
 [batch-migration]: {{< ref "/user-guide/process-engine/process-instance-migration.md#asynchronous-batch-migration-execution" >}}
 [batch]: {{< ref "/user-guide/process-engine/batch.md" >}}
+[set transient variables]: {{< ref "/user-guide/process-engine/variables.md#transient-variables" >}}

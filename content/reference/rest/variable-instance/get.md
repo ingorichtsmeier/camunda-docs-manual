@@ -117,6 +117,11 @@ A JSON object with the following properties:
     <td>The id of the task that this variable instance belongs to.</td>
   </tr>
   <tr>
+    <td>batchId</td>
+    <td>String</td>
+    <td>The id of the batch that this variable instance belongs to.<</td>
+  </tr>
+  <tr>
     <td>activityInstanceId</td>
     <td>String</td>
     <td>The id of the activity instance that this variable instance belongs to.</td>
@@ -167,12 +172,12 @@ Status 200.
       "id": "someId",
       "name": "amount",
       "type": "Integer",
-      "variableType": "integer",
       "value": 5,
       "processDefinitionId": "aProcessDefinitionId",
       "processInstanceId": "aProcessInstanceId",
       "executionId": "b68b71c9-e310-11e2-beb0-f0def1557726",
       "taskId": null,
+      "batchId": null,
       "activityInstanceId": "Task_1:b68b71ca-e310-11e2-beb0-f0def1557726",
       "caseExecutionId": null,
       "caseInstanceId": null,

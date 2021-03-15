@@ -76,16 +76,31 @@ If a static accessor needs to be used (e.g. processEngines.getProcessEngine(name
 ```
 Here, the `camunda.bpm.process-engine-name=foo` will set (a unique name) "foo" as the Process Engine name.
 
+## Disabling Telemetry
+
+Telemetry reports are introduced with Camunda Platform 7.14.0. To prevent sending data generated during testing, we encourage you to disable the [telemetry reporter][engine-config-telemetryReporterActivate]. Please read more about the topic in the dedicated page for [Telemetry][telemetry-initial-report].
+
+Example of disabling the reporter in Spring Boot setups:
+
+```
+camunda.bpm:
+  generic-properties.properties:
+    telemetry-reporter-activate: false
+```
+
+[engine-config-telemetryReporterActivate]: {{< ref "/reference/deployment-descriptors/tags/process-engine.md#telemetryReporterActivate" >}}
+[telemetry-initial-report]: {{< ref "/introduction/telemetry.md#initial-data-report" >}}
+
 ## Camunda Assertions
 
-The [Camunda BPM Assertions]({{< ref 
+The [Camunda Platform Assertions]({{< ref 
 "/user-guide/testing/_index.md#camunda-assertions" >}}) library is 
 integrated with the Camunda Spring Boot Starter in
 order to make testing processes in your Spring Boot application easier.
 
 ### Using Assertions with Context Caching
 
-Out of the box, the Camunda BPM Assertions library tries to use the
+Out of the box, the Camunda Platform Assertions library tries to use the
 default engine or the (single) one that is available. Since when using
 Context Caching multiple engines are used in different contexts, binding
 the correct Process Engine to the Camunda Assertions library is required

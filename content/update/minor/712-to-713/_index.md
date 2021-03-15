@@ -13,13 +13,15 @@ menu:
 
 ---
 
-This document guides you through the update from Camunda BPM `7.12.x` to `7.13.0`. It covers these use cases:
+This document guides you through the update from Camunda Platform `7.12.x` to `7.13.0`. It covers these use cases:
 
 1. For administrators and developers: [Database Updates](#database-updates)
 1. For administrators and developers: [Full Distribution Update](#full-distribution)
 1. For administrators: [Standalone Web Application](#standalone-web-application)
 1. For developers: [Spring Boot Starter Update](#spring-boot-starter-update)
-   * [REST API: Changed Default Application Path](#rest-api-changed-default-application-path)
+   * [Changed Default Application Paths for Webapp & REST API](#changed-default-application-paths)
+   * [New License Key Mechanism](#new-license-key-mechanism)
+   * [Changed Behavior for Custom HistoryEventHandler](#changed-behavior-for-custom-historyeventhandler)
 1. For developers: [External Task Client Update](#external-task-client-update)
 1. For developers: [Identity Service Queries](#identity-service-queries)
 1. For developers: [MetricsReporterIdProvider interface Deprecation](#metricsreporteridprovider-interface-deprecation)
@@ -28,8 +30,10 @@ This document guides you through the update from Camunda BPM `7.12.x` to `7.13.0
 1. For Developers: [Changes in Cockpit](#changes-in-cockpit)
 1. For developers: [Deployment-Aware Batch Operations](#deployment-aware-batch-operations)
 1. For developers: [Historic Process Instance Variables on Asynchronous Instantiation](#historic-process-instance-variables-on-asynchronous-instantiation)
+1. For administrators and developers: [Oracle JDBC Driver Removed from Camunda Docker Images](#oracle-jdbc-driver-removed-from-camunda-docker-images)
+1. For administrators and developers: [PostgreSQL Support Clarification](#postgresql-support-clarification)
 
-This guide covers mandatory migration steps as well as optional considerations for the initial configuration of new functionality included in Camunda BPM 7.13.
+This guide covers mandatory migration steps as well as optional considerations for the initial configuration of new functionality included in Camunda Platform 7.13.
 
 
 # Database Updates
@@ -49,7 +53,7 @@ Every Camunda installation requires a database schema update.
 
     The scripts update the database from one minor version to the next, and change the underlying database structure. So make sure to backup your database in case there are any failures during the update process.
 
-3. We highly recommend to also check for any existing patch scripts for your database that are within the bounds of the new minor version you are updating to. Execute them in ascending order by version number. _Attention_: This step is only relevant when you are using an enterprise version of the Camunda BPM platform, e.g., `7.13.X` where `X > 0`. The procedure is the same as in step 1, only for the new minor version.
+3. We highly recommend to also check for any existing patch scripts for your database that are within the bounds of the new minor version you are updating to. Execute them in ascending order by version number. _Attention_: This step is only relevant when you are using an enterprise version of the Camunda Platform, e.g., `7.13.X` where `X > 0`. The procedure is the same as in step 1, only for the new minor version.
 
 
 # Full Distribution
@@ -61,16 +65,16 @@ The following steps are required:
 1. Update the Camunda libraries and applications inside the application server
 2. Migrate custom process applications
 
-Before starting, make sure that you have downloaded the Camunda BPM 7.13 distribution for the application server you use. It contains the SQL scripts and libraries required for the update. This guide assumes you have unpacked the distribution to a path named `$DISTRIBUTION_PATH`.
+Before starting, make sure that you have downloaded the Camunda Platform 7.13 distribution for the application server you use. It contains the SQL scripts and libraries required for the update. This guide assumes you have unpacked the distribution to a path named `$DISTRIBUTION_PATH`.
 
 ## Camunda Libraries and Applications
 
 Please choose the application server you are working with from the following list:
 
-* [JBoss AS/Wildfly]({{< ref "/update/minor/711-to-712/jboss.md" >}})
-* [Apache Tomcat]({{< ref "/update/minor/711-to-712/tomcat.md" >}})
-* [Oracle WebLogic]({{< ref "/update/minor/711-to-712/wls.md" >}})
-* [IBM WebSphere]({{< ref "/update/minor/711-to-712/was.md" >}})
+* [JBoss AS/Wildfly]({{< ref "/update/minor/712-to-713/jboss.md" >}})
+* [Apache Tomcat]({{< ref "/update/minor/712-to-713/tomcat.md" >}})
+* [Oracle WebLogic]({{< ref "/update/minor/712-to-713/wls.md" >}})
+* [IBM WebSphere]({{< ref "/update/minor/712-to-713/was.md" >}})
 
 ## Custom Process Applications
 
@@ -98,32 +102,58 @@ If a database other than the default H2 database is used, the following steps mu
 # Spring Boot Starter Update
 
 Starting with version 7.13, the **`camunda-bpm-spring-boot-starter`** library has been migrated into the `camunda-bpm-platform` repository.
-The library version has therefore changed from Camunda Spring Boot Starter (currently at 3.4.x) to the Camunda BPM Platform version (7.13.0).
+The library version has therefore changed from Camunda Spring Boot Starter (currently at 3.4.x) to the Camunda Platform version (7.13.0).
 The Maven coordinates have not changed otherwise.
 
 Overriding the Camunda version used by the Spring Boot Starter is not necessary anymore. 
-Pick the version of the Starter that resembles the version of Camunda BPM you would like to use.
+Pick the version of the Starter that resembles the version of Camunda Platform you would like to use.
 
 If you are using Camunda Spring Boot Starter within your Spring Boot application, then you need to:
 
 1. Check [Version Compatibility Matrix]({{< ref "/user-guide/spring-boot-integration/version-compatibility.md" >}})
 2. Update **Spring Boot Starter** and, when required, Spring Boot versions in your `pom.xml`.
-3. Remove the Camunda BPM version from your `pom.xml` in case you overrode it before (e.g. when using the enterprise version or a patch release).
+3. Remove the Camunda Platform version from your `pom.xml` in case you overrode it before (e.g. when using the enterprise version or a patch release).
 
-## REST API: Changed Default Application Path
+## Changed Default Application Paths
 
-With this release, the context path of the Spring Boot REST API Starter changed. The change aligns 
-the application path with all other Camunda BPM distributions.
+With this release, the application path of the Spring Boot Webapp Starter & REST API Starter changed. 
+The change aligns the application path with all other Camunda Platform distributions.
+
+### REST API
 
 Old Application Path: `/rest`\
 New Application Path: `/engine-rest`
 
-If you want to change the application path back to the old one, please see the documentation about the 
-[Spring Boot Starter REST API].
+If you want to change the application path back to the old one, use the following configuration
+property in your `application.yaml` file:
 
-[Spring Boot Starter REST API]: {{< ref "/user-guide/spring-boot-integration/rest-api.md" >}}
+```yaml
+spring.jersey.application-path=/rest
+```
 
-## New license key mechanism
+### Webapp
+
+Old Application Path: `/`\
+New Application Path: `/camunda`
+
+In previous versions, there was a problem when using URL paths like `/api/*` or `/app/*` for your 
+custom resources since these paths were reserved for the Camunda Platform Webapp. For instance, the 
+Camunda Platform Webapp specific CSRF Prevention Filter was applied on these paths and might have 
+interfered with your custom REST endpoints or applications. With the changed application path, you 
+can now use these paths without restrictions and remove any workarounds (e. g. URL whitelisting for 
+the CSRF Prevention Filter).
+
+If you want to change the application path back to the old one, use the following configuration
+property in your `application.yaml` file:
+
+```yaml
+camunda.bpm.webapp.application-path=/
+```
+
+**Please Note:** When changing the application path back to `/`, the `/api/*` and `/app/*` are 
+reserved for the Camunda Platform Webapp again.
+
+## New License Key Mechanism
 
 The mechanism for license key pickup (via Spring properties or from the classpath of a Spring Boot application) has been moved with the release of 7.13. It is now only available from the **`camunda-bpm-spring-boot-starter-webapp-ee`** module.
 
@@ -139,8 +169,11 @@ If you want to set a license key without using the **`camunda-bpm-spring-boot-st
 ```java
 managementService.setLicenseKey(String licenseKey);
 ```
-Only Spring Boot applications that use one of the mentioned ways of setting the key are affected by these changes. Other mechanisms included in the engine (e.g. automatic pickup from the users home directory) are not affected. You can find more information about license keys in the [System Management Guide]({{< ref "/webapps/admin/system-management.md#camunda-license-key" >}}).
+Only Spring Boot applications that use one of the mentioned ways of setting the key are affected by these changes. Other mechanisms included in the engine (e.g. automatic pickup from the users home directory) are not affected. You can find more information about license keys in the [dedicated License use section]({{< ref "/user-guide/license-use.md" >}}).
 
+## Changed Behavior for Custom HistoryEventHandler
+
+Camunda Spring Boot projects now use an instance of `CompositeHistoryEventHandler` by default, which is backed by a list of `HistoryEventHandler`, that you can configure via an engine configuration property called `customHistoryEventHandlers`. To add your custom implementation, simply add it to the list. This list also contains the default handler (`DbHistoryEventHandler`), which writes to the history database tables. If you want to disable it, use the new `enableDefaultDbHistoryEventHandler` engine configuration flag. Setting the flag to false will ensure the `DbHistoryEventHandler` is not included in the `CompositeHistoryEventHandler`.
 
 # External Task Client Update
 
@@ -196,7 +229,7 @@ Please note that the new versions of Freemarker and Velocity contain changes tha
 
 # Entirely Replaced FEEL Engine
 
-With this release, we replaced the old FEEL Engine completely. From now on, Camunda BPM uses the 
+With this release, we replaced the old FEEL Engine completely. From now on, Camunda Platform uses the 
 [FEEL Scala Engine](https://github.com/camunda/feel-scala) (opens external link) by default.
 You can restore the legacy behavior via a [configuration property][feel-legacy-prop].
 
@@ -384,3 +417,24 @@ In Cockpit, starting from 7.13, you will notice a different activity instance id
 {{< img src="./img/variable-log.png" title="Variable Log" >}}
 
 As you can see in the picture above, the variable log shows the process instance id for the activity instead of the start event activity. The same is valid if you are using the Java and/or REST API.
+
+# Oracle JDBC Driver Removed from Camunda Docker Images
+
+The Docker images for Camunda 7.13 no longer provide an Oracle JDBC driver out of the box. If you relied on this, apply the strategy outlined in https://github.com/camunda/docker-camunda-bpm-platform#database-environment-variables: Add the driver to the container and configure the database settings manually by linking the configuration file into the container.
+
+# PostgreSQL Support Clarification
+
+According to the [PostgreSQL versioning documentation][postgresql-versioning], the PostgreSQL versioning
+scheme changed from PostgreSQL 10. For versions before PostgreSQL 10, a major version was marked by the first two
+version numbers, e.g. `9.4`, `9.6`. From PostgreSQL 10, a major version is marked by a single version number, e.g. `10`,
+`11`, `12`.
+
+As this was only a change to the versioning scheme, the content of the minor releases (e.g. `9.4.6`,
+`9.6.18`, `10.13`, `11.2`, etc.) didn't change. Therefore, we have updated the [Camunda Supported Environments][supported-environments],
+to reflect that Camunda supports all the minor version updates of a major PostgreSQL version.
+
+Note that this adjustment doesn't change the supported versions of Amazon Aurora PostgreSQL. This is a database
+service built on top of PostgreSQL, and as such, needs to be tested for support separately from PostgreSQL.
+
+[postgresql-versioning]: https://www.postgresql.org/support/versioning/
+[supported-environments]: {{< ref "/introduction/supported-environments.md#supported-database-products" >}}

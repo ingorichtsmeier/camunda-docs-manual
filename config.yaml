@@ -1,7 +1,7 @@
 ---
 baseURL: "/manual/develop/"
 languageCode: "en-us"
-title: "Camunda BPM documentation"
+title: "Camunda Platform documentation"
 theme: "camunda"
 
 blackfriday:
@@ -13,7 +13,7 @@ params:
       name: "Get Started"
       url: "/get-started"
     - id: "manual"
-      name: "BPM Platform"
+      name: "Camunda Platform"
       url: "/manual"
     - id: "optimize"
       name: "Optimize"
@@ -30,9 +30,11 @@ params:
   section:
     id: "manual"
     version: "develop"
-    versionAlias: "7.13"
+    versionAlias: "7.15"
     versions:
       - "latest"
+      - "7.14"
+      - "7.13"
       - "7.12"
       - "7.11"
       - "7.10"

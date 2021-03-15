@@ -310,7 +310,7 @@ The same problems can occur by using a custom output variable mapping since
 `DmnDecisionResult` has methods that return the same collections as the
 predefined mappers. Additionally, it is not recommended to save a
 `DmnDecisionResult` or a `DmnDecisionResultEntries` as process/case variable because
-the underlying implementation can change in a new version of Camunda BPM.
+the underlying implementation can change in a new version of Camunda Platform.
 
 To prevent any of these problems, you should use primitive variables only.
 Alternatively, you can use a custom object for serialization that you control
@@ -320,7 +320,7 @@ by yourself.
 
 DMN Decision tables and Decision Literal Expressions contain multiple expressions which will be evaluated by the
 DMN engine. For more information about the expressions of a decision
-please see our [DMN 1.1 reference][decision table]. These expressions can
+please see our [DMN 1.3 reference][decision table]. These expressions can
 access all process/case variables which are available in the scope of the
 calling task. The variables are provided through a read-only variable context.
 
@@ -371,8 +371,8 @@ information about expression languages.
 
 ## Accessing Beans
 
-If the DMN engine is invoked by the Camunda BPM platform, it uses the same
-JUEL configuration as the Camunda BPM engine. Therefore, it is also
+If the DMN engine is invoked by the Camunda Platform, it uses the same
+JUEL configuration as the Camunda Platform engine. Therefore, it is also
 possible to access Spring and CDI Beans from JUEL expressions in decisions. 
 For more information on this integration, please see the corresponding
 section in the [Spring] and [CDI] guides.
@@ -410,8 +410,8 @@ This can be done, for example, by creating a [process engine plugin].
 Please **note** that these functions are available in all JUEL expressions
 in the platform, not only in DMN decisions.
 
-[decision table]: {{< ref "/reference/dmn11/decision-table/_index.md" >}}
-[decision literal expression]: {{< ref "/reference/dmn11/decision-literal-expression/_index.md" >}}
+[decision table]: {{< ref "/reference/dmn/decision-table/_index.md" >}}
+[decision literal expression]: {{< ref "/reference/dmn/decision-literal-expression/_index.md" >}}
 [deployed]: {{< ref "/user-guide/process-engine/decisions/repository.md" >}}
 [business rule task]: {{< ref "/reference/bpmn20/tasks/business-rule-task.md" >}}
 [decision task]: {{< ref "/reference/cmmn11/tasks/decision-task.md" >}}
@@ -420,7 +420,7 @@ in the platform, not only in DMN decisions.
 [output variable mapping]: {{< ref "/user-guide/process-engine/variables.md#input-output-variable-mapping" >}}
 [execution listener]: {{< ref "/user-guide/process-engine/delegation-code.md#execution-listener" >}}
 [expression languages]: {{< ref "/user-guide/dmn-engine/expressions-and-scripts.md" >}}
-[FEEL]: {{< ref "/reference/dmn11/feel/_index.md" >}}
+[FEEL]: {{< ref "/reference/dmn/feel/_index.md" >}}
 [Spring]: {{< ref "/user-guide/spring-framework-integration/_index.md#expression-resolving" >}}
 [CDI]: {{< ref "/user-guide/cdi-java-ee-integration/expression-resolving.md" >}}
 [process engine plugin]: {{< ref "/user-guide/process-engine/process-engine-plugins.md" >}}

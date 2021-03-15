@@ -18,20 +18,37 @@ To change visual aspects of Cockpit, you can edit the user stylesheet file locat
 and can override the standard styles.
 
 ```css
-.navbar-brand {
+/* hides the Camunda logo */
+.app-banner svg {
+  display: none;
+}
+.app-banner {
   /* hides the "Camunda Cockpit" text */
-  text-indent: -999em;
+  text-indent: 200vw;
   /* put your logo */
   background-image: url(./path/to/the/logo.png);
   /* sets the width to match the logo's width */
   width: 80px;
 }
 
-/* changes the header bottom border color  */
-[cam-widget-header] {
-  border-bottom-color: blue;
+/* changes the header top border color  */
+.Header {
+  border-top-color: blue !important;
 }
 ```
+
+**Note:** you can also change the app name (*Cockpit*) and vendor (*Camunda*)
+by changing the `app/cockpit/scripts/config.js` configuration file as follow:
+
+```js
+// …
+app: {
+  name: 'Operations',
+  vendor: 'Company'
+},
+// …
+```
+
 # Localization
 
 The localization of Cockpit is contained in the `app/cockpit/locales/` directory. This
@@ -63,9 +80,24 @@ If you want to add your own scripts to the Cockpit application, you should add a
 file with something like this:
 
 ```javascript
-var camCockpitConf = {
+export default {
   // …
-  customScripts: {
+  customScripts: 
+    ['custom-module/module.js']
+};
+```
+This includes a `custom-module/module.js` file. The path is relative to the `app/cockpit` folder in the Camunda webapp .war file.
+
+You can find a complete example about how to use `customScripts` to develop a Cockpit Plugin in the [Camunda Platform examples repository](https://github.com/camunda/camunda-bpm-examples/tree/master/cockpit/cockpit-cats).
+
+## Legacy Custom Scripts
+
+Custom Scripts created for Camunda Platform 7.13 or earlier can be included using the `requireJsConfig` property to the `app/cockpit/scripts/config.js`. You can include these custom scripts using the custom [requireJS configuration](https://requirejs.org/docs/api.html#config).
+
+```Javascript
+export default {
+  // …
+  requireJsConfig: {
     // names of angular modules defined in your custom script files.
     // will be added to the 'cam.cockpit.custom' as dependencies
     ngDeps: ['my.custom.module'],
@@ -78,20 +110,10 @@ var camCockpitConf = {
       'custom-ng-module': '../custom-ng-module/script'
     }
   }
-};
-```
-This includes a `custom-ng-module/script.js` file. The path is relative to the
-`app/cockpit` folder in the Camunda webapp .war file.
-
-**Note:** The content of the `customScripts` property will be treated as a
-[RequireJS configuration](http://requirejs.org/docs/api.html#config) except for the
-`nodeIdCompat` and `skipDataMain` which are irrelevant and `deps` which will be used like:
-
-```javascript
-require(config.deps, callback);
+}
 ```
 
-You can find a complete example about how to use `customScripts` to develop a Cockpit Plugin in the [Camunda BPM examples repository](https://github.com/camunda/camunda-bpm-examples/tree/master/cockpit/js-only-plugin).
+For more details about legacy Plugins, check out the legacy [Plugin documentation](https://docs.camunda.org/manual/7.13/webapps/cockpit/extend/plugins/). Please note that this link will take you to the documentation of Camunda Platform **7.13** .
 
 # BPMN Diagram Viewer (bpmn.js)
 
@@ -100,21 +122,19 @@ The diagram viewer (bpmn.js) can be either customized by moddle extensions or
 of Cockpit, a `bpmnJs` property must be added to the `app/cockpit/scripts/config.js` file.
 
 ## Additional Modules
-To add modules, the `additionalModules` property needs to be specified, where each module has a unique name (key) and a
-path (value) to the JavaScript file of the module. The path is relative to the `app/cockpit` folder in the .war file of
-the Camunda Webapp. The suffix `.js` of the file is added automatically and must not be specified.
+To add modules, the `additionalModules` property needs to be specified, where each module is registered with its path. The path is relative to the `app/cockpit` folder in the .war file of the Camunda Webapp.
 
 ```json
 ...
 bpmnJs: {
-  additionalModules: {
-    myCustomModule: 'my-custom-module/module'
-  }
+  additionalModules: [
+     'my-custom-module/module'
+  ]
 }
 ...
 ```
 
-You can find an example on how to add an additional bpmn.js module to Cockpit in the [Camunda BPM examples repository](https://github.com/camunda/camunda-bpm-examples/tree/master/cockpit/cockpit-bpmn-js-module).
+You can find an example on how to add an additional bpmn.js module to Cockpit in the [Camunda Platform examples repository](https://github.com/camunda/camunda-bpm-examples/tree/master/cockpit/cockpit-bpmn-js-module).
 
 ## Moddle Extensions
 The BPMN moddle can be extended by adding a `moddleExtensions` property. Each moddle extension has a unique name (key)
@@ -135,7 +155,7 @@ bpmnJs: {
 You can configure the skipCustomListeners and the skipIoMappings flag globally for cockpit by adding a `skipCustomListeners` or `skipIoMappings` property in `app/cockpit/scripts/config.js`:
 
 ```javascript
-   window.camCockpitConf = {
+   export default {
      skipCustomListeners: {
        default: true, // default value for skipCustomListeners is true
        hidden: false  // skipCustomListeners checkbox is not hidden
@@ -156,7 +176,7 @@ will be hidden everywhere in Cockpit.
 # Runtime Activity Instance Metrics (Process Definition)
 
  ```javascript
-    window.camCockpitConf = {
+    export default {
        runtimeActivityInstanceMetrics: {
           display: true
        }
@@ -169,7 +189,7 @@ In any case does the toggle button allow to display/remove the statistics on dem
 # Historic Activity Instance Metrics
 
  ```javascript
-    window.camCockpitConf = {
+    export default {
        historicActivityInstanceMetrics: {
          adjustablePeriod: true,
          //select from the default time period: day, week, month, complete
@@ -186,7 +206,7 @@ In any case does the toggle button allow to display/remove the statistics on dem
 # Default Filter for the Historic Process Instances Search
 
 ```javascript
-    window.camCockpitConf = {
+    export default {
       defaultFilter: {
         historicProcessDefinitionInstancesSearch: {
           lastDays: 5,
@@ -210,7 +230,7 @@ The default name of the CSRF Cookie is `XSRF-TOKEN`. When using other applicatio
 same-origin, the CSRF mechanisms could interfere with each other. To avoid the name conflict, you
 can change the name of the CSRF cookie in the `config.js` file as follows:
 ```javascript
-var camCockpitConf = {
+export default = {
   // …
   csrfCookieName: 'MY-XSRF-TOKEN'
 };
@@ -223,7 +243,7 @@ var camCockpitConf = {
 First-time visitors are shown a message directing them to the camunda welcome page. If you do
 not want this message to be shown, you can disable it by adjusting the `config.js` as follows:
 ```javascript
-var camCockpitConf = {
+export default = {
   // …
   disableWelcomeMessage: true
 };
@@ -235,7 +255,7 @@ var camCockpitConf = {
 The default maximum length of a User Operation Log annotation is 4000 characters. Some databases have smaller limits. You can change the maximum allowed input length in the `config.js` file as follows:
 
 ```javascript
-var camCockpitConf = {
+export default = {
   // …
   userOperationLogAnnotationLength: 4000
 };
@@ -243,26 +263,12 @@ var camCockpitConf = {
 
 **Note:** This does only affect the Cockpit Operation Log. For the Admin Operation Log, check out the [Admin Configuration]({{<ref "/webapps/admin/configuration.md#user-operation-log-annotation-length" >}}).
 
+# Preview Deployed Embedded Forms
+You can view a preview of embedded forms and other HTML files in the Cockpit deployment view. If the HTML has embedded `<script>` tags, they will be executed, which may have unintended side-effects. You can disable this feature if you don't trust your deployed HTML files in the `config.js` file as follows: 
 
-# Advanced Styles Customization
-
-In addition to the basic `user-styles.css` file, you can edit the source style- and layout files
-using [less](http://lesscss.org/) to change the overall appearance of Cockpit.
-
-If you want to customize the interface with `less`, you should probably start by having a look
-at the variables defined in the following files:
-
- - `node_modules/camunda-commons-ui/node_modules/bootstrap/less/variables.less`
-   defines the original Bootstrap variables
- - `node_modules/camunda-commons-ui/resources/less/cam-variables.less`
-   overrides some Bootstrap variables (above) and add some custom ones
-
-## Compiling with Grunt
-
-From within the `camunda-bpm-webapp` directory:
-
-```sh
-grunt build:Cockpit
+```javascript
+export default = {
+  // …
+  previewHtml: false
+};
 ```
-
-The command will build the frontend assets (of Cockpit), styles included.

@@ -61,12 +61,16 @@ A JSON object with the following properties:
     <td>Only include variable instances which belong to one of the passed task ids.</td>
   </tr>
   <tr>
+    <td>batchIdIn</td>
+    <td>Only include variable instances which belong to one of the passed batch ids.</td>
+  </tr>
+  <tr>
     <td>activityInstanceIdIn</td>
     <td>Only include variable instances which belong to one of the passed activity instance ids.</td>
   </tr>
   <tr>
     <td>tenantIdIn</td>
-    <td>Only include variable instances which belong to one of the passed and comma-separated tenant ids.</td>
+    <td>Only include variable instances which belong to one of the passed tenant ids.</td>
   </tr>
   <tr>
     <td>variableValues</td>
@@ -136,7 +140,7 @@ A JSON object that contains the count as the only property.
   <tr>
     <td>400</td>
     <td>application/json</td>
-    <td>Returned if some of the query parameters are invalid, for example if a <code>sortOrder</code> parameter is supplied, but no <code>sortBy</code>, or if an invalid operator for variable comparison is used. See the <a href="{{< ref "/reference/rest/overview/_index.md#error-handling" >}}">Introduction</a> for the error response format.</td>
+    <td>Returned if some of the query parameters are invalid, for example if an invalid operator for variable comparison is used. See the <a href="{{< ref "/reference/rest/overview/_index.md#error-handling" >}}">Introduction</a> for the error response format.</td>
   </tr>
 </table>
 
@@ -149,7 +153,7 @@ POST `/variable-instance/count`
 
 Request Body:
 
-    {"variableValuess": 
+    {"variableValues": 
         [{"name": "amount",
          "operator": "gteq",
          "value": "5"

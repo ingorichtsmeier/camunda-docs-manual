@@ -48,15 +48,19 @@ GET `/variable-instance`
   </tr>
   <tr>
     <td>caseInstanceIdIn</td>
-    <td>Only include variable instances which belong to one of the passed case instance ids.</td>
+    <td>Only include variable instances which belong to one of the passed and comma-separated case instance ids.</td>
   </tr>
   <tr>
     <td>caseExecutionIdIn</td>
-    <td>Only include variable instances which belong to one of the passed case execution ids.</td>
+    <td>Only include variable instances which belong to one of the passed and comma-separated case execution ids.</td>
   </tr>
   <tr>
     <td>taskIdIn</td>
     <td>Only include variable instances which belong to one of the passed and comma-separated task ids.</td>
+  </tr>
+  <tr>
+    <td>batchIdIn</td>
+    <td>Only include variable instances which belong to one of the passed and comma-separated batch ids.</td>
   </tr>
   <tr>
     <td>activityInstanceIdIn</td>
@@ -183,6 +187,11 @@ A JSON array of variable instance objects. Each variable instance object has the
     <td>The id of the task that this variable instance belongs to.</td>
   </tr>
   <tr>
+    <td>batchId</td>
+    <td>String</td>
+    <td>The id of the batch that this variable instance belongs to.</td>
+  </tr>
+  <tr>
     <td>activityInstanceId</td>
     <td>String</td>
     <td>The id of the activity instance that this variable instance belongs to.</td>
@@ -191,6 +200,11 @@ A JSON array of variable instance objects. Each variable instance object has the
     <td>tenantId</td>
     <td>String</td>
     <td>The id of the tenant that this variable instance belongs to.</td>
+  </tr>
+  <tr>
+    <td>errorMessage</td>
+    <td>String</td>
+    <td>An error message in case a Java Serialized Object could not be de-serialized.</td>
   </tr>
 </table>
 
@@ -229,48 +243,48 @@ GET `/variable-instance?processInstanceIdIn=aProcessInstanceId,anotherProcessIns
         "id": "someId",
         "name": "amount",
         "type": "Integer",
-        "variableType": "integer",
         "value": 5,
         "processDefinitionId": "aProcessDefinitionId",
         "processInstanceId": "aProcessInstanceId",
         "executionId": "b68b71c9-e310-11e2-beb0-f0def1557726",
         "taskId": null,
+        "batchId": null,
         "activityInstanceId": "Task_1:b68b71ca-e310-11e2-beb0-f0def1557726",
         "caseExecutionId": null,
         "caseInstanceId": null,
-        "serializationConfig": null,
-        "tenantId": null
+        "tenantId": null,
+        "errorMessage": null
       },
       {
         "id": "someOtherId",
         "name": "amount",
         "type": "Integer",
-        "variableType": "integer",
         "value": 15,
         "processDefinitionId": "aProcessDefinitionId",
         "processInstanceId": "aProcessInstanceId",
         "executionId": "68b71c9-e310-11e2-beb0-f0def1557726",
         "taskId": null,
+        "batchId": null,
         "activityInstanceId": "Task_1:b68b71ca-e310-11e2-beb0-f0def1557726",
         "caseExecutionId": null,
         "caseInstanceId": null,
-        "serializationConfig": null,
-        "tenantId": null
+        "tenantId": null,
+        "errorMessage": null
       },
       {
         "id": "yetAnotherId",
         "name": "amount",
         "type": "Integer",
-        "variableType": "integer",
         "value": 150,
         "processDefinitionId": "aProcessDefinitionId",
         "processInstanceId": "anotherProcessInstanceId",
         "executionId": "68b71c9-e310-11e2-beb0-f0def1557726",
         "taskId": null,
+        "batchId": null,
         "activityInstanceId": "Task_2:b68b71ca-e310-11e2-beb0-f0def1557726",
         "caseExecutionId": null,
         "caseInstanceId": null,
-        "serializationConfig": null,
-        "tenantId": null
+        "tenantId": null,
+        "errorMessage": null
       }      
     ]

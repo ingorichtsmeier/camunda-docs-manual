@@ -15,19 +15,19 @@ Spring boot starters allow to enable behavior of your spring-boot application by
 
 These starters will pre-configure the Camunda process engine, REST API and Web applications, so they can easily be used in a standalone process application.
 
-If you are not familiar with [Spring Boot](http://projects.spring.io/spring-boot/), read the [getting started](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#getting-started) guide.
+If you are not familiar with [Spring Boot](http://projects.spring.io/spring-boot/), read the [getting started](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#getting-started) guide or use the [Camunda Platform Initializr](https://start.camunda.com/).
 
-To enable Camunda BPM auto configuration, add the following dependency to your ```pom.xml```:
+To enable Camunda Platform auto configuration, add the following dependency to your ```pom.xml```:
 
 ```xml
 <dependency>
   <groupId>org.camunda.bpm.springboot</groupId>
   <artifactId>camunda-bpm-spring-boot-starter</artifactId>
-  <version>7.13.0</version>
+  <version>{{< minor-version >}}.0</version>
 </dependency>
 ```
 
-This will add the Camunda engine v.7.13.0 to your dependencies.
+This will add the Camunda engine v.{{< minor-version >}}.0 to your dependencies.
 
 Other starters that can be used are: [`camunda-bpm-spring-boot-starter-rest`](rest-api) and [`camunda-bpm-spring-boot-starter-webapp`](webapps).
 
@@ -39,7 +39,7 @@ To use Camunda Spring Boot Starter with Camunda EE you need to define the EE ver
 <dependency>
   <groupId>org.camunda.bpm.springboot</groupId>
   <artifactId>camunda-bpm-spring-boot-starter-webapp-ee</artifactId>
-  <version>7.13.0-ee</version>
+  <version>{{< minor-version >}}.0-ee</version>
 </dependency>
 ```
 

@@ -44,8 +44,23 @@ GET `/history/incident`
     <td>Restricts to incidents that have the given incident message.</td>
   </tr>
   <tr>
+    <td>incidentMessageLike</td>
+    <td>Restricts to incidents that incidents message is a substring of the given value. 
+     The string can include the wildcard character '%' to express 
+     like-strategy: starts with (string%), ends with (%string) or contains (%string%).
+    </td>
+  </tr>
+  <tr>
     <td>processDefinitionId</td>
     <td>Restricts to incidents that belong to a process definition with the given id.</td>
+  </tr>
+  <tr>
+     <td>processDefinitionKey</td>
+     <td>Restricts to incidents that have the given processDefinitionKey.</td>
+  </tr>
+  <tr>
+    <td>processDefinitionKeyIn</td>
+    <td>Restricts to incidents that have one of the given process definition keys.</td>
   </tr>
   <tr>
     <td>processInstanceId</td>
@@ -54,6 +69,30 @@ GET `/history/incident`
   <tr>
     <td>executionId</td>
     <td>Restricts to incidents that belong to an execution with the given id.</td>
+  </tr>
+  <tr>
+    <td>createTimeBefore</td>
+    <td>Restricts to incidents that have a createTime date before the given date.
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g.,
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>createTimeAfter</td>
+    <td>Restricts to incidents that have a createTime date after the given date.
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., 
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>endTimeBefore</td>
+    <td>Restricts to incidents that have an endTimeBefore date before the given date.
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., 
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>endTimeAfter</td>
+    <td>Restricts to incidents that have an endTimeAfter date after the given date.
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., 
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>activityId</td>
@@ -103,7 +142,7 @@ GET `/history/incident`
   <tr>
     <td>sortBy</td>
     <td>Sort the results lexicographically by a given criterion. Valid values are
-    <code>incidentId</code>, <code>incidentMessage</code>, <code>createTime</code>, <code>endTime</code>, <code>incidentType</code>, <code>executionId</code>, <code>activityId</code>, <code>processInstanceId</code>, <code>processDefinitionId</code>, <code>causeIncidentId</code>, <code>rootCauseIncidentId</code>, <code>configuration</code>, <code>tenantId</code> and <code>incidentState</code>.
+    <code>incidentId</code>, <code>incidentMessage</code>, <code>createTime</code>, <code>endTime</code>, <code>incidentType</code>, <code>executionId</code>, <code>activityId</code>, <code>processInstanceId</code>, <code>processDefinitionId</code>, <code>processDefinitionKey</code>, <code>causeIncidentId</code>, <code>rootCauseIncidentId</code>, <code>configuration</code>, <code>tenantId</code> and <code>incidentState</code>.
     Must be used in conjunction with the <code>sortOrder</code> parameter.</td>
   </tr>
   <tr>
@@ -230,6 +269,11 @@ Each historic incident object has the following properties:
     <td>String</td>
     <td>The process instance id of the root process instance that initiated the process containing this incident.</td>
   </tr>
+  <tr>
+    <td>annotation</td>
+    <td>String</td>
+    <td>The annotation set to the incident.</td>
+  </tr>
 </table>
 
 \* For further information, please see the <a href="{{< ref "/reference/rest/overview/date-format.md" >}}"> documentation</a>.
@@ -286,7 +330,8 @@ GET `/history/incident?processInstanceId=aProcInstId`
     "deleted": false,
     "resolved": false,
     "removalTime": null,
-    "rootProcessInstanceId": "aRootProcessInstanceId"
+    "rootProcessInstanceId": "aRootProcessInstanceId",
+    "annotation": "an annotation"
   },
   {
     "id": "anIncidentId",
@@ -308,7 +353,8 @@ GET `/history/incident?processInstanceId=aProcInstId`
     "deleted": false,
     "resolved": true,
     "removalTime": "2018-02-10T14:33:19.000+0200",
-    "rootProcessInstanceId": "aRootProcessInstanceId"
+    "rootProcessInstanceId": "aRootProcessInstanceId",
+    "annotation": "another annotation"
   }
 ]
 ```

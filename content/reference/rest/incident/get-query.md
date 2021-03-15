@@ -44,6 +44,13 @@ GET `/incident`
     <td>Restricts to incidents that have the given incident message.</td>
   </tr>
   <tr>
+    <td>incidentMessageLike</td>
+    <td>Restricts to incidents that incidents message is a substring of the given value. 
+     The string can include the wildcard character '%' to express 
+     like-strategy: starts with (string%), ends with (%string) or contains (%string%).
+    </td>
+  </tr>
+  <tr>
     <td>processDefinitionId</td>
     <td>Restricts to incidents that belong to a process definition with the given id.</td>
   </tr>
@@ -58,6 +65,18 @@ GET `/incident`
   <tr>
     <td>executionId</td>
     <td>Restricts to incidents that belong to an execution with the given id.</td>
+  </tr>
+  <tr>
+    <td>incidentTimestampBefore</td>
+    <td>Restricts to incidents that have an incidentTimestamp date before the given date. 
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., 
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
+  </tr>
+  <tr>
+    <td>incidentTimestampAfter</td>
+    <td>Restricts to incidents that have an incidentTimestamp date after the given date. 
+     By default*, the date must have the format <code>yyyy-MM-dd'T'HH:mm:ss.SSSZ</code>, e.g., 
+     <code>2013-01-23T14:42:45.000+0200</code>.</td>
   </tr>
   <tr>
     <td>activityId</td>
@@ -182,6 +201,11 @@ Each incident object has the following properties:
     <td>String</td>
     <td>The job definition id the incident is associated with.</td>
   </tr>
+  <tr>
+    <td>annotation</td>
+    <td>String</td>
+    <td>The annotation set to the incident.</td>
+  </tr>
 </table>
 
 \* For further information, please see the <a href="{{< ref "/reference/rest/overview/date-format.md" >}}"> documentation</a>.
@@ -232,7 +256,8 @@ GET `/incident?processInstanceId=aProcInstId`
     "configuration": "aConfiguration",
     "tenantId": null,
     "incidentMessage": "anIncidentMessage",
-    "jobDefinitionId": "aJobDefinitionId"
+    "jobDefinitionId": "aJobDefinitionId",
+    "annotation": "an annotation"
   },
   {
     "id": "anIncidentId",
@@ -248,7 +273,8 @@ GET `/incident?processInstanceId=aProcInstId`
     "configuration": "anotherConfiguration",
     "tenantId": null,
     "incidentMessage": "anotherIncidentMessage",
-    "jobDefinitionId": null
+    "jobDefinitionId": null,
+    "annotation": "another annotation"
   }
 ]
 ```

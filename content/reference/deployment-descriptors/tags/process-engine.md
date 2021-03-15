@@ -13,7 +13,7 @@ menu:
 ---
 
 
-The process engine configuration can be placed in both [processes.xml]({{< ref "/reference/deployment-descriptors/descriptors/processes-xml.md" >}}) and the [bpm-platform.xml]({{< ref "/reference/deployment-descriptors/descriptors/bpm-platform-xml.md" >}}) files. If the process engine is configured in either or both of those files, it will be bootstrapped by the Camunda BPM platform infrastructure and be made available through `BpmPlatform.getProcessEngineService().getProcessEngine("name of process engine")`.
+The process engine configuration can be placed in both [processes.xml]({{< ref "/reference/deployment-descriptors/descriptors/processes-xml.md" >}}) and the [bpm-platform.xml]({{< ref "/reference/deployment-descriptors/descriptors/bpm-platform-xml.md" >}}) files. If the process engine is configured in either or both of those files, it will be bootstrapped by the Camunda Platform infrastructure and be made available through `BpmPlatform.getProcessEngineService().getProcessEngine("name of process engine")`.
 
 
 # Example
@@ -251,10 +251,28 @@ The following is a list with the most commonly used process engine configuration
   </tr>
 
   <tr>
+    <td><code>cmmnEnabled</code></td>
+    <td>Boolean</td>
+    <td>
+        When set to <code>false</code>, the following behavior changes:
+        <ul>
+         <li>The automated schema maintenance (creating and dropping tables, see property <code>databaseSchemaUpdate</code>)
+           does not cover the tables required for CMMN execution.</li>
+         <li>CMMN resources are not deployed as case definitions to the engine.</li>
+         <li>Tasks from CMMN cases are not returned by the task query.</li>
+       </ul>
+        Default value is <code>true</code>.
+      <p>
+        <strong>Values:</strong> <code>true</code>, <code>false</code> (Boolean).
+      </p>
+    </td>
+  </tr>
+
+  <tr>
     <td><code>databaseSchemaUpdate</code></td>
     <td>String</td>
     <td>
-        Sets the value for process engine <a href="{{< ref "/user-guide/process-engine/database.md#database-configuration">}}">database schema creation</a>.
+        Sets the value for process engine <a href="{{< ref "/user-guide/process-engine/database/database-configuration.md">}}">database schema creation</a>.
       <p>
         <strong>Values:</strong> <code>false</code>, <code>create-drop</code>, <code>true</code>.
       </p>
@@ -278,6 +296,14 @@ The following is a list with the most commonly used process engine configuration
   </tr>
 
   <tr>
+    <td><code>commandRetries</code></td>
+    <td>Integer</td>
+    <td>
+        <b>Only used with CockroachDB.</b> Specifies how many times a Command will be retried before a <code>CrdbTransactionRetryException</code> is reported to the caller (more details <a href="{{< ref "/user-guide/process-engine/database/cockroachdb-configuration.md#custom-cockroachdb-transaction-retry-mechanism" >}}">here</a>). Default value: <code>0</code>
+    </td>
+  </tr>
+
+  <tr>
     <td><code>defaultUserPermissionNameForTask</code></td>
     <td>String</td>
     <td>
@@ -289,6 +315,24 @@ The following is a list with the most commonly used process engine configuration
     <td><a name="disabledPermissions"></a><code>disabledPermissions</code></td>
     <td>List</td>
     <td>Define a list of Permissions' names. These permissions will be not taken into account whenever authorization check is performed.
+    </td>
+  </tr>
+
+  <tr>
+    <td><code>dmnEnabled</code></td>
+    <td>Boolean</td>
+    <td>
+        When set to <code>false</code>, the following behavior changes:
+        <ul>
+         <li>The automated schema maintenance (creating and dropping tables, see property <code>databaseSchemaUpdate</code>)
+           does not cover the tables required for DMN execution.</li>
+         <li>DMN resources are not deployed as decision definitions or
+           decision requirements definitions to the engine.</li>
+       </ul>
+        Default value is <code>true</code>.
+      <p>
+        <strong>Values:</strong> <code>true</code>, <code>false</code> (Boolean).
+      </p>
     </td>
   </tr>
 
@@ -521,7 +565,7 @@ The following is a list with the most commonly used process engine configuration
     <td>
         Controls if the engine executes the jdbc statements as Batch or not.
       <p>
-        Default is <code><strong>true</strong></code>, but this has to be disabled for some databases. See <a href="{{<ref "/user-guide/process-engine/database.md#jdbc-batch-processing" >}}">the user guide</a> for further details.
+        Default is <code><strong>true</strong></code>, but this has to be disabled for some databases. See <a href="{{<ref "/user-guide/process-engine/database/database-configuration.md#jdbc-batch-processing" >}}">the user guide</a> for further details.
       </p>
     </td>
   </tr>
@@ -582,6 +626,23 @@ The following is a list with the most commonly used process engine configuration
         <strong>Values:</strong> <code>true</code>, <code>false</code> (Boolean).
     </td>
   </tr>
+  
+  <tr>
+    <td><code>standaloneTasksEnabled</code></td>
+    <td>Boolean</td>
+    <td>
+        When set to <code>false</code>, the following behavior changes:
+        <ul>
+         <li>Standalone tasks can no longer be created via API.</li>
+         <li>Standalone tasks are not returned by the TaskQuery.</li>
+       </ul>
+        Default value is <code>true</code>.
+      <p>
+        <strong>Values:</strong> <code>true</code>, <code>false</code> (Boolean).
+      </p>
+    </td>
+  </tr>
+  
   <tr>
     <td><code>tenantCheckEnabled</code></td>
     <td>Boolean</td>
@@ -707,7 +768,7 @@ The following is a list with the most commonly used process engine configuration
   <tr>
     <td><a name="enablePasswordPolicy"></a><code>enablePasswordPolicy</code></td>
     <td>Boolean</td>
-    <td>Set to <code>true</code>, to enable a <a href="{{< ref "/user-guide/process-engine/password-policy">}}">password policy</a> for users that are managed by the engine. If a <a href="https://docs.camunda.org/manual/latest/user-guide/process-engine/password-policy/#customize-the-password-policy">custom password policy</a> is configured, it will be enabled. Otherwise the <a href="https://docs.camunda.org/manual/latest/user-guide/process-engine/password-policy/#default-password-policy">default password policy</a> is activated.
+    <td>Set to <code>true</code>, to enable a <a href="{{< ref "/user-guide/process-engine/password-policy">}}">password policy</a> for users that are managed by the engine. If a <a href="https://docs.camunda.org/manual/latest/user-guide/process-engine/password-policy/#customize-the-password-policy">custom password policy</a> is configured, it will be enabled. Otherwise the <a href="https://docs.camunda.org/manual/latest/user-guide/process-engine/password-policy/#built-in-password-policy">built-in password policy</a> is activated.
     </td>
   </tr>
 
@@ -758,6 +819,64 @@ The following is a list with the most commonly used process engine configuration
     <td>
         Define a list of instances of <code>FeelCustomFunctionProvider</code>.<br><br>
         Read more about it in the <a href="{{< ref "/user-guide/dmn-engine/feel/custom-functions.md" >}}">User Guide</a>.
+    </td>
+  </tr>
+
+  <tr id="initializeTelemetry">
+    <td><code>initializeTelemetry</code></td>
+    <td>boolean</td>
+    <td>
+        <p>Sets the initial property value of telemetry configuration only once when it has never been enabled/disabled before. If enabled, information about the setup and usage of the process engine is sent to remote Camunda servers for the sake of analytical evaluation. It can be enabled/disabled later via Java/<a href="{{< ref "/reference/rest/telemetry/port-telemetry.md" >}}">REST</a> API.
+        <p>
+          For more information and a complete list of the data that is collected, please check the <a href="{{< ref "/introduction/telemetry.md" >}}">Telemetry</a> page.
+        </p>
+        <h6>
+          <strong>Legal note:</strong>
+        </h6>
+        <p>
+          Before you install a Camunda Platform Runtime version >= 7.14.0-alpha1 (and 7.13.7+, 7.12.12+, 7.11.19+) or activate the telemetric functionality, please make sure that you are authorized to take this step, and that the installation or activation of the telemetric functionality is not in conflict with any internal company policies, compliance guidelines, any contractual or other provisions or obligations of your company.
+        </p>
+        <p>
+          Camunda can not be held responsible in the event of unauthorized installation or activation of this function.
+        </p>
+        
+    </td>
+  </tr>
+  
+  <tr id="telemetryReporterActivate">
+    <td><code>telemetryReporterActivate</code></td>
+    <td>Boolean</td>
+    <td>
+        <p>Activates the thread that periodically reports telemetry. Note that the thread only sends telemetry if telemetry is in addition enabled via API or by the <code>initializeTelemetry</code> property.</p>
+        <p>The reporter can for example be deactivated in unit testing setups to avoid any threads running besides the test thread.</p>
+        Default value: <code>true</code>
+    </td>
+  </tr>
+  
+  <tr>
+    <td><code>telemetryReportingPeriod</code></td>
+    <td>Long</td>
+    <td>
+        Sets the period in which telemetry requests are sent. Value must be in seconds.
+        Default value: <code>86400</code> (one day)
+    </td>
+  </tr>
+  
+  <tr id="telemetryRequestRetries">
+    <td><code>telemetryRequestRetries</code></td>
+    <td>Integer</td>
+    <td>
+        Sets the number of retries that are performed when a telemetry request fails.
+        Default value: <code>2</code>
+    </td>
+  </tr>
+  
+  <tr id="telemetryRequestTimeout">
+    <td><code>telemetryRequestTimeout</code></td>
+    <td>Integer</td>
+    <td>
+        Sets the request timeout configuration in milliseconds of the telemetry request.
+        Default value: <code>15000</code> (15 s)
     </td>
   </tr>
 
@@ -923,6 +1042,20 @@ The history time to live defines the number of days using a time specified by th
     <td>Map</td>
     <td>Defines history time to live for each specific historic batch operation.
 The history time to live defines the number of days using a time specified by the ISO-8601 date format. The function only accepts the notation to define a number of days.
+    </td>
+  </tr>
+  <tr>
+    <td>historyCleanupJobLogTimeToLive</td>
+    <td>String</td>
+    <td>Defines history time to live for history job log entries produced by history cleanup jobs. This works with the <code>removalTimeBased</code> history cleanup strategy.
+    The history time to live defines the number of days using a time specified by the ISO-8601 date format. The function only accepts the notation to define a number of days.
+    </td>
+  </tr>
+  <tr>
+    <td>taskMetricsTimeToLive</td>
+    <td>String</td>
+    <td>Defines time to live for task metrics entries produced by user task assignments.
+    The history time to live defines the number of days using a time specified by the ISO-8601 date format. The function only accepts the notation to define a number of days.
     </td>
   </tr>
 </table>

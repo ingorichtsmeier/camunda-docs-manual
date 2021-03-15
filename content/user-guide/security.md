@@ -12,11 +12,11 @@ menu:
 
 This page provides an overview of how to secure a Camunda installation. For Camunda's security policy, a list of security notices and a guide how to report vulnerabilities, please visit the [general security documentation](/security).
 
-In order to secure a Camunda installation, Camunda itself must be configured correctly and it must be integrated correctly into its environment. This section also identifies areas where we consider security issues to be relevant for the specific Camunda BPM product and listed those in the subsequent sections. Compliance for those areas is ensured based on common industry best practices and influenced by security requirements of standards like OWASP Top 10 and others
+In order to secure a Camunda installation, Camunda itself must be configured correctly and it must be integrated correctly into its environment. This section also identifies areas where we consider security issues to be relevant for the specific Camunda Platform product and listed those in the subsequent sections. Compliance for those areas is ensured based on common industry best practices and influenced by security requirements of standards like OWASP Top 10 and others
 
 # Deployment Options and Components
 
-There are different ways of using Camunda BPM and different components are provided: the process engine itself, the REST API, the web applications. Depending on how Camunda is deployed and which components are used, different security considerations apply. The following list gives a general overview over deployment options and components outlining the main differences from a security point of view. The remainder of this chapter elaborates on the different configuration options.
+There are different ways of using Camunda Platform and different components are provided: the process engine itself, the REST API, the web applications. Depending on how Camunda is deployed and which components are used, different security considerations apply. The following list gives a general overview over deployment options and components outlining the main differences from a security point of view. The remainder of this chapter elaborates on the different configuration options.
 
 * Embedded Java library inside an application: in this case, the Camunda engine is embedded inside a custom Java Application. Usually the application takes care of securing access to Camunda's APIs and the APIs are not directly exposed to an end user. In this case, the application typically takes care of ensuring authentication and preventing access by unauthorized users.
 * Shared Process Engine: in this scenario, the Process Engine is deployed as a container service into an application server such that it can be used by the applications deployed into the same container / server. This case is similar to the embedded Java library case.
@@ -24,7 +24,12 @@ There are different ways of using Camunda BPM and different components are provi
 * Web applications (Cockpit, Tasklist, ...): similar considerations to the REST API apply.
 
 
-Keep in mind that it is not recommended to use the pre-packaged distribution in production environment rather install the full distribution manually (for example [Tomcat manual installation](https://docs.camunda.org/manual/latest/installation/full/tomcat/manual/)). We do not advise to use pre-packaged distribution in production because it is for user who need more getting started experience. In case you still want to use it, you should consider removing the invoice application and the demo user.
+Keep in mind that it is not recommended to use the pre-packaged distribution in production environment rather install the full distribution manually (for example [Tomcat manual installation](https://docs.camunda.org/manual/latest/installation/full/tomcat/manual/)).
+
+{{< note title="Security Consideration" class="warning" >}}
+  The pre-packaged distribution is intended for users who want a getting started experience. In case
+  you still want to use it in production, consider un-deploying the invoice application and removing the demo user.
+{{</note>}}
 
 # Security Configuration inside Camunda
 
@@ -57,7 +62,7 @@ For the web applications, authentication is enabled by default and it is not pos
 
 To perform authentication, Camunda can use two sources: a database or LDAP.
 
-When using the the database, usernames and passwords are stored inside the `ACT_ID_USER` table (see [documentation on database schema]({{< ref "/user-guide/process-engine/database.md#identity" >}})). To protect the passwords stored in the database, Camunda uses two concepts:
+When using the the database, usernames and passwords are stored inside the `ACT_ID_USER` table (see [documentation on database schema]({{< ref "/user-guide/process-engine/database/database-schema.md#identity" >}})). To protect the passwords stored in the database, Camunda uses two concepts:
 
 * **hashing**: instead of storing the password in plain text, a hash is stored. When authenticating, the same hash is generated from the user's input and compared against the hash in the database. If both hashes are equal the authentication attempt is successful. Camunda allows users to configure and customize the hash function used. Please refer the [documentation section on password hashing]({{< ref "/user-guide/process-engine/password-hashing.md" >}}) for details.
 * **salted hashes** to protect the database against rainbow table attacks, Camunda uses salted hashes. Similar to hashing itself, this function can be configured and extended to a user's needs. Please refer the [documentation section on password hashing]({{< ref "/user-guide/process-engine/password-hashing.md" >}}) for details.
@@ -78,6 +83,32 @@ Similar considerations as for authentication apply. For an in-depth discussion, 
 
 Authorizations can be used to restrict a user from accessing a data object (such as a process or a task) and can be used to restrict how the user can interact with such data objects (read-only vs. modifications). Authorizations in Camunda are very powerful and it is recommended to read the corresponding [documentation entry on authorizations]({{< ref "/user-guide/process-engine/authorization-service.md" >}}).
 
+### Prevent enumerating user accounts by brute-force creating new users
+
+Under certain circumstances, an attacker can enumerate user accounts by brute-force creating new users:
+
+You don't centrally manage user accounts (e.g., with the help of LDAP or a custom implementation of `WritableIdentityProvider`) but instead ...
+
+*  ... use an account "self-service" approach: Unauthenticated users are allowed to create accounts; 
+       i.e., you have implemented a custom REST endpoint which can create users without authentication
+*  ... an authenticated user has `CREATE` permission on `ANY` `USER` resource to create new user accounts
+       and an untrusted person has access to this account (please see the [Authorization Service] docs 
+       to learn how permissions are granted to resources)
+
+[Authorization Service]: {{< ref "/user-guide/process-engine/authorization-service.md" >}}
+
+As soon as the attacker has obtained information about existing user ids, they can put all their 
+efforts on cracking passwords.
+
+{{< note title="Heads-up!" class="warning" >}}
+We strongly recommend you to use the product with centrally managed user accounts. It is certainly not 
+advisable to manage accounts via the ways mentioned above.
+{{< /note >}}
+
+We think that the before mentioned scenarios are uncommon for organizations using the Camunda Platform Runtime. 
+However, we want to inform you about the options to prevent unrecommended usage, which makes the product
+vulnerable to attacks.
+
 ## Throttle login attempts
 
 The engine gives option to throttle login attempts. The mechanism behind this is enabled by default. You can read more about it under [Identity Service]({{< ref "/user-guide/process-engine/identity-service.md#throttle-login-attempts" >}}) in User Guide.
@@ -87,9 +118,19 @@ To determine if the provided ID is acceptable or not, IDs can be matched against
 You can read more about it under [Identity Service]({{< ref "/user-guide/process-engine/identity-service.md#custom-whitelist-for-user-group-and-tenant-ids" >}}) in User Guide.
 
 ## Password Policy
-For users that are managed within the engine (i.e. not LDAP-managed users) it is possible to specify a password policy to ensure that all user passwords meet a certain security standard. While choosing a strong password policy will make the users choose better passwords it can annoy them if the policy is too strict. Since version 7.11 a [default policy]({{< ref "/user-guide/process-engine/password-policy.md#default-password-policy" >}}) is available that requires passwords to follow only a few rules. However, a much higher level of security can be achieved by using a more sophisticated password policy. (e.g. by [password topology blacklisting] (https://blog.korelogic.com/blog/2014/04/04/pathwell_topologies), also see [OWASP guide] (https://github.com/OWASP/CheatSheetSeries/blob/7d94e9a29174b8fd76235ca60f47245d1f34df1e/cheatsheets/Authentication_Cheat_Sheet.md#password-complexity) on password complexity)
 
-If you consider adding your own password policy you can find more information about how password policies in the engine work in our [Password Policy user guide]({{< ref "/user-guide/process-engine/password-policy.md" >}}).
+When using the identity management provided by the engine (i.e., not the LDAP identity management),
+it is possible to configure a password policy to ensure that all user passwords meet a certain security 
+standard. 
+
+Since version 7.11, a [built-in password policy]({{< ref "/user-guide/process-engine/password-policy.md#built-in-password-policy" >}}) 
+can be enabled that requires passwords to follow specific rules. However, you can achieve a much higher 
+level of security by implementing a more sophisticated custom password policy (e.g., with the help of 
+[Password Topology Blacklisting] (https://blog.korelogic.com/blog/2014/04/04/pathwell_topologies), 
+also see the [OWASP guide] (https://github.com/OWASP/CheatSheetSeries/blob/7d94e9a29174b8fd76235ca60f47245d1f34df1e/cheatsheets/Authentication_Cheat_Sheet.md#password-complexity) 
+on password complexity).
+
+You can find more information on how to enable the base password policy and how to implement a custom password policy in our [User Guide]({{< ref "/user-guide/process-engine/password-policy.md" >}}).
 
 ## Script Execution
 
@@ -103,6 +144,8 @@ However, script languages such as Groovy or Javascript are executed directly ins
 ## Forms
 
 Camunda offers different types of forms which are primarily used in Tasklist. In the input inside of this forms you can call and execute scripts which allows you to achieve easily your business logic. Please validate this input each time to prevent malicious behaviour.
+
+If you don't want to display form previews and execute the embedded scripts in Cockpit, you can disable it in the [configuration]({{< ref "/webapps/cockpit/extend/configuration.md#preview-deployed-embedded-forms" >}}).
 
 ## Queries
 
@@ -153,11 +196,12 @@ Since BPMN schema validation requires external XSD documents, the property `http
 
 ## HTTP Header Security in Webapps
 
-Out-of-the-box the web applications provide the following security-related HTTP headers:
+Out-of-the-box the web applications support the following security-related HTTP headers:
 
 * XSS Protection
 * Content Security Policy
 * Content-Type Options
+* Strict Transport Security (needs to be enabled explicitly)
 
 These headers enable browser-side security mechanisms which help to improve the protection against several attacking scenarios.
 
@@ -231,10 +275,52 @@ The container provides the session cookie. Please consult the documentation abou
 
 ### Error handling
 
-The Webapps have a default error page which is displayed in case of unhandled exceptions raised within the scope of the webapps. The REST API displays the type and short error message when an error is thrown. This practice prevents attackers from obtaining technical details about the system, which for example a stacktrace could reveal (see OWASP's [Improper Error Handling article](https://www.owasp.org/index.php/Improper_Error_Handling) for details).
+When it comes to error handling, from a security perspective, the top goal is to prevent attackers 
+from obtaining technical details about the system, which for example, a stack trace could reveal 
+(see OWASP's [Improper Error Handling article] for more information).
 
-On top of that, it is recommended to configure the application server in the same way for any exceptions raised within the scope of the server. The configuration is server-specific.
+[Improper Error Handling article]: https://www.owasp.org/index.php/Improper_Error_Handling
 
-Related resources:
+In this section, we describe what we do to prevent disclosing technical details about the system.
 
-* [OWASP Securing Tomcat Guide](https://www.owasp.org/index.php/Securing_tomcat)
+#### Webapps
+
+In the Webapps, a generic default error page is provided when an error occurs. This error page does 
+not include any technical details like stack traces.
+
+#### REST API
+
+The REST API only displays the type and a short error message when an error is thrown.
+
+### Prevent Disclosure of Application Server Internals
+
+In the [Error handling](#error-handling) paragraph, we explain our technical measures not to disclose 
+any technical details about the Camunda Platform Runtime.
+
+However, technical details cannot only be disclosed on the application level, but also by the application 
+server itself. Therefore, it is recommended to configure the application server in a way that no 
+technical details are disclosed when an error occurs on the application server level.
+
+The exact configuration and the defaults differ among application servers. 
+
+Please find below external documentation on how to configure your application server correctly:
+
+* Tomcat 7.0+
+    * Official Documentation
+        * [Security Considerations](https://tomcat.apache.org/tomcat-7.0-doc/security-howto.html#Valves)
+        * [Error Reporter Valve](https://tomcat.apache.org/tomcat-7.0-doc/config/valve.html#Error_Report_Valve)
+    * Alternative Resources
+        * [Securing Tomcat](https://wiki.owasp.org/index.php/Securing_tomcat)
+* Wildfly 10.1+: Official Documentation
+    * [Servlet Container Configuration](https://docs.jboss.org/author/display/WFLY10/Undertow%20subsystem%20configuration.html#91947134_Undertowsubsystemconfiguration-Servletcontainerconfiguration)
+    * [Model Reference](https://wildscribe.github.io/WildFly/10.1/subsystem/undertow/servlet-container/index.html#attr-stack-trace-on-error)
+* JBoss EAP 7.0+: Official Documentation
+    * [Servlet Container Configuration](https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html/configuration_guide/reference_material#idm139812627222560)
+    * [Model Refernce](https://wildscribe.github.io/JBoss%20EAP/7.0/subsystem/undertow/servlet-container/index.html#attr-stack-trace-on-error)
+* JBoss EAP 6.4: Official Documentation
+    * [Model Reference](https://wildscribe.github.io/JBoss%20EAP/6.4/subsystem/web/configuration/jsp-configuration/index.html#attr-display-source-fragment)
+* Camunda Run/Spring Boot 2.3+
+    * Official Documentation
+        * [Javadocs about ErrorProperties.IncludeStacktrace](https://docs.spring.io/spring-boot/docs/2.3.0.RELEASE/api/org/springframework/boot/autoconfigure/web/ErrorProperties.IncludeStacktrace.html)
+    * Alternative Resources
+        * [Error Handling on Baeldung](https://www.baeldung.com/spring-boot-configure-tomcat#2-error-handling)
